@@ -1,23 +1,22 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
-import { CheckinComponent } from './checkin.component';
+@Component({
+  selector: 'app-checkin',
+  templateUrl: './checkin.component.html',
+  styleUrls: ['./checkin.component.css'],
+  standalone: true,
+  imports: [CommonModule, FormsModule]
+})
+export class CheckinComponent {
+  nom = '';
+  chambre = '';
+  confirmation = false;
 
-describe('CheckinComponent', () => {
-  let component: CheckinComponent;
-  let fixture: ComponentFixture<CheckinComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [CheckinComponent]
-    })
-    .compileComponents();
-
-    fixture = TestBed.createComponent(CheckinComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+  validerCheckin() {
+    if (this.nom && this.chambre) {
+      this.confirmation = true;
+    }
+  }
+}
