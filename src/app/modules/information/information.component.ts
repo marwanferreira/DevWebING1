@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { UserService } from '../../auth/user.service';
+
 
 @Component({
   selector: 'app-information',
@@ -43,7 +45,22 @@ export class InformationComponent {
     });
   }
 
+  constructor(public userService: UserService) {}
+
   inscription(email: string): void {
-    alert(`Merci pour votre inscription avec : ${email}`);
+    const allowedEmails = [
+      'john.doe@example.com',
+      'alice.smith@example.com',
+      'hotel.guest1@example.com'
+    ];
+  
+    if (!allowedEmails.includes(email.trim().toLowerCase())) {
+      alert("Votre email ne correspond pas à un client enregistré. Inscription refusée.");
+      return;
+    }
+  
+    // Simulate sending confirmation email
+    alert(`Un email de confirmation a été envoyé à : ${email}`);
+    // Here you'd store the email in a pending list and generate a token
   }
 }
