@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../auth/user.service';
+import { ApplicationService } from '../../auth/application.service';
 
 @Component({
   selector: 'app-information',
@@ -34,14 +35,18 @@ export class InformationComponent {
     pseudo: '',
     email: '',
     genre: '',
-    age: null,
-    dob: '',
+    age: 0,
+    dateNaissance: '',
+    typeMembre: '',
     motivation: ''
   };
 
   formSubmitted = false;
 
-  constructor(public userService: UserService) {}
+  constructor(
+    public userService: UserService,
+    private applicationService: ApplicationService
+  ) {}
 
   ngOnInit() {
     this.appliquerFiltres();
@@ -60,8 +65,10 @@ export class InformationComponent {
   }
 
   postuler(): void {
+    this.applicationService.addCandidature({
+      ...this.form,
+      dateSoumission: new Date()
+    });
     this.formSubmitted = true;
-    console.log('Nouvelle candidature reçue :', this.form);
-    // Simulate saving to backend/pending list
   }
 }

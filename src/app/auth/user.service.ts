@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Candidature } from '../candidature/candidature.model';
 
 export type UserType = 'visiteur' | 'simple' | 'complexe' | 'admin';
 
@@ -46,10 +47,27 @@ export class UserService {
       birthdate: '1992-11-03',
       memberType: 'Testeur',
       profilePhoto: 'https://i.pravatar.cc/150?u=alice.smith@example.com'
+    },
+    {
+      email: 'admin@residia.com',
+      password: 'adminpass',
+      role: 'admin',
+      name: 'Admin',
+      surname: 'Residia',
+      pseudonym: 'adminUser',
+      gender: 'Autre',
+      birthdate: '1990-01-01',
+      memberType: 'Directeur',
+      profilePhoto: 'https://i.pravatar.cc/150?u=admin@residia.com'
     }
   ];
+  
 
-  private confirmedUsers: string[] = ['john.doe@example.com', 'alice.smith@example.com'];
+  private confirmedUsers: string[] = [
+    'john.doe@example.com',
+    'alice.smith@example.com',
+    'admin@residia.com'
+  ];
 
   setUser(type: UserType) {
     this.currentUser = type;
@@ -111,5 +129,23 @@ export class UserService {
         memberType: u.memberType,
         profilePhoto: u.profilePhoto
       }));
+  }
+
+  addUserFromCandidature(c: Candidature, role: UserType): void {
+    const newUser: UserProfile = {
+      email: c.email,
+      password: 'default123', // Or send email for real password setup
+      role,
+      name: c.prenom,
+      surname: c.nom,
+      pseudonym: c.pseudo,
+      gender: c.genre,
+      birthdate: c.dateNaissance,
+      memberType: c.typeMembre,
+      profilePhoto: `https://i.pravatar.cc/150?u=${c.email}`
+    };
+
+    this.userDatabase.push(newUser);
+    this.confirmedUsers.push(c.email);
   }
 }
