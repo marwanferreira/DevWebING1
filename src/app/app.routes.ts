@@ -9,34 +9,39 @@ export const routes: Routes = [
     path: 'information',
     loadComponent: () =>
       import('./modules/information/information.component').then(m => m.InformationComponent)
-    // Public — accessible to everyone
   },
 
   {
     path: 'visualisation',
     loadComponent: () =>
       import('./modules/visualisation/visualisation.component').then(m => m.VisualisationComponent),
-    canActivate: [roleGuard(['simple', 'complexe', 'admin'])] // 🔐 Only for logged-in users
+    canActivate: [roleGuard(['simple', 'complexe', 'admin'])]
   },
 
   {
     path: 'gestion',
     loadComponent: () =>
       import('./modules/gestion/gestion.component').then(m => m.GestionComponent),
-    canActivate: [roleGuard(['complexe', 'admin'])] // 🔐 Only complexe and admin
+    canActivate: [roleGuard(['complexe', 'admin'])]
   },
 
   {
     path: 'administration',
     loadComponent: () =>
       import('./modules/administration/administration.component').then(m => m.AdministrationComponent),
-    canActivate: [roleGuard(['admin'])] // 🔐 Only admin
+    canActivate: [roleGuard(['admin'])], // ✅ Fixed comma here
+    children: [
+      {
+        path: 'candidatures',
+        loadComponent: () =>
+          import('./modules/administration/gestion-candidatures.component').then(m => m.GestionCandidaturesComponent)
+      }
+    ]
   },
 
   {
     path: 'login',
     loadComponent: () =>
       import('./modules/login/login.component').then(m => m.LoginComponent)
-    // Public — accessible to all
   }
 ];
