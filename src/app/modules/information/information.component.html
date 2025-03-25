@@ -1,0 +1,47 @@
+<div class="container mt-5">
+    <h2 class="text-primary">🏨 Bienvenue à l'Hôtel Intelligent</h2>
+    <p class="lead">{{ freeTourText }}</p>
+  
+    <hr>
+  
+    <h4>🔎 Recherche d'informations</h4>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label for="filtreType" class="form-label">Type d'information</label>
+        <select id="filtreType" class="form-select" [(ngModel)]="filtreType">
+          <option value="">Tous</option>
+          <option value="restaurant">Restaurant</option>
+          <option value="spa">Spa</option>
+          <option value="transport">Transport</option>
+          <option value="evenement">Événement</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label for="filtreTexte" class="form-label">Mot-clé</label>
+        <input id="filtreTexte" type="text" class="form-control" placeholder="Ex: concert" [(ngModel)]="filtreTexte">
+      </div>
+    </div>
+  
+    <div class="mt-3">
+      <h5>📋 Résultats :</h5>
+      <div *ngFor="let info of resultatsFiltres" class="card mb-2">
+        <div class="card-body">
+          <h5 class="card-title">{{ info.titre }}</h5>
+          <p class="card-text">{{ info.description }}</p>
+          <span class="badge bg-info text-dark text-uppercase">{{ info.type }}</span>
+        </div>
+      </div>
+      <div *ngIf="resultatsFiltres.length === 0" class="text-muted">Aucun résultat trouvé.</div>
+    </div>
+  
+    <hr>
+  
+    <h4>📝 Inscription</h4>
+    <form (submit)="inscription(email.value); email.value=''; $event.preventDefault()">
+      <div class="input-group w-50">
+        <input #email type="email" class="form-control" placeholder="Entrez votre email" required>
+        <button type="submit" class="btn btn-primary">S'inscrire</button>
+      </div>
+    </form>
+  </div>
+  
