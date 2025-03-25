@@ -7,13 +7,14 @@ import { routes } from './app.routes';
 
 @NgModule({
   declarations: [
-    AccueilComponent // ✅ seulement les composants non-standalone
+    // ✅ seulement les composants non-standalone
+    AccueilComponent
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot(routes)
   ],
-  // ❌ PAS DE AppComponent ici car il est standalone
-  bootstrap: [] // ❌ rien ici non plus si tu démarres avec main.ts
+  providers: [],
+  bootstrap: [] // ❌ rien ici car le bootstrap se fait via main.ts avec AppComponent standalone
 })
 export class AppModule { }

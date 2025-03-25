@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-information',
@@ -10,24 +10,35 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./information.component.css']
 })
 export class InformationComponent {
-  freeTourText: string = "Bienvenue dans notre hôtel intelligent. Découvrez nos services innovants !";
-  filtreType: string = '';
-  filtreTexte: string = '';
-  informations = [
-    { type: 'restaurant', titre: 'Restaurant La Terrasse', description: 'Cuisine méditerranéenne avec vue sur mer.' },
-    { type: 'spa', titre: 'Spa & Détente', description: 'Massages et soins relaxants.' },
-    { type: 'transport', titre: 'Navette Aéroport', description: 'Départs toutes les 30 minutes.' },
-    { type: 'evenement', titre: 'Concert Live', description: 'Ce soir au bar principal à 20h.' },
+  freeTourText = "Bienvenue à l'hôtel intelligent ! Découvrez nos services connectés, nos chambres confortables, et notre robot valet. Explorez les nouveautés locales ci-dessous.";
+
+  infos = [
+    { titre: 'Spa Relaxant', categorie: 'bien-être', type: 'activité', description: 'Ouvert tous les jours de 10h à 22h' },
+    { titre: 'Soirée Jazz', categorie: 'événement', type: 'animation', description: 'Tous les vendredis à 20h au bar' },
+    { titre: 'Buffet du Monde', categorie: 'restaurant', type: 'service', description: 'Cuisine internationale au restaurant principal' },
+    { titre: 'Piscine Extérieure', categorie: 'loisir', type: 'équipement', description: 'Accessible de 8h à 20h avec transats connectés' },
+    { titre: 'Service de Voiturier', categorie: 'accueil', type: 'service', description: 'Disponible 24h/24 à l’entrée principale' },
   ];
 
-  get resultatsFiltres() {
-    return this.informations.filter(info =>
-      (!this.filtreType || info.type === this.filtreType) &&
-      (!this.filtreTexte || info.titre.toLowerCase().includes(this.filtreTexte.toLowerCase()))
-    );
+  filtreType = '';
+  filtreTexte = '';
+  resultatsFiltres = this.infos;
+
+  ngOnInit() {
+    this.appliquerFiltres();
+  }
+
+  appliquerFiltres() {
+    this.resultatsFiltres = this.infos.filter(info => {
+      const typeMatch = this.filtreType === '' || info.type === this.filtreType;
+      const texteMatch = this.filtreTexte === '' ||
+        info.titre.toLowerCase().includes(this.filtreTexte.toLowerCase()) ||
+        info.description.toLowerCase().includes(this.filtreTexte.toLowerCase());
+      return typeMatch && texteMatch;
+    });
   }
 
   inscription(email: string) {
-    alert(`Merci pour votre inscription, ${email} !`);
+    alert(`Merci pour votre inscription avec : ${email}`);
   }
 }
