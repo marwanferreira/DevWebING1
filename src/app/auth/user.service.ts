@@ -11,7 +11,7 @@ export interface UserProfile {
   surname: string;
   pseudonym: string;
   gender: string;
-  birthdate: string; // 'YYYY-MM-DD'
+  birthdate: string;
   memberType: string;
   profilePhoto: string;
 }
@@ -61,7 +61,6 @@ export class UserService {
       profilePhoto: 'https://i.pravatar.cc/150?u=admin@residia.com'
     }
   ];
-  
 
   private confirmedUsers: string[] = [
     'john.doe@example.com',
@@ -134,7 +133,7 @@ export class UserService {
   addUserFromCandidature(c: Candidature, role: UserType): void {
     const newUser: UserProfile = {
       email: c.email,
-      password: 'default123', // Or send email for real password setup
+      password: 'default123', // 🔐 Temporary password
       role,
       name: c.prenom,
       surname: c.nom,
