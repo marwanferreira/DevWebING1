@@ -4,25 +4,31 @@
     Hôtel Intelligent
   </a>
   <ul class="navbar-nav ms-auto">
-    <li class="nav-item"><a class="nav-link" routerLink="/">Accueil</a></li>
-    <li class="nav-item" *ngIf="userService.is('simple') || userService.is('complexe') || userService.is('admin')">
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/">Accueil</a>
+    </li>
+
+    <li class="nav-item" *ngIf="userService.is('visiteur')">
       <a class="nav-link" routerLink="/information">Information</a>
     </li>
-    <li class="nav-item" *ngIf="userService.is('complexe') || userService.is('admin')">
+
+    <li class="nav-item" *ngIf="userService.is('simple') || userService.is('complexe')">
       <a class="nav-link" routerLink="/visualisation">Visualisation</a>
     </li>
-    <li class="nav-item" *ngIf="userService.is('complexe') || userService.is('admin')">
+
+    <li class="nav-item" *ngIf="userService.is('complexe')">
       <a class="nav-link" routerLink="/gestion">Gestion</a>
     </li>
+
     <li class="nav-item" *ngIf="userService.is('admin')">
       <a class="nav-link" routerLink="/administration">Administration</a>
     </li>
   </ul>
 </nav>
 
-<div class="p-3 bg-light border-bottom">
+<div class="user-select p-3">
   <label for="userType">Type d'utilisateur :</label>
-  <select id="userType" class="form-select w-auto d-inline mx-2" (change)="changerType($event)">
+  <select class="form-select w-auto d-inline mx-2" (change)="changerType($event)">
     <option value="visiteur">Visiteur</option>
     <option value="simple">Simple</option>
     <option value="complexe">Complexe</option>

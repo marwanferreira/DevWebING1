@@ -14,8 +14,7 @@ export class AppComponent {
   constructor(public userService: UserService) {}
 
   changerType(event: Event) {
-    const selectedValue = (event.target as HTMLSelectElement).value;
-    this.userService.setUser(selectedValue as UserType);
-    console.log('Utilisateur défini sur :', selectedValue);
-  }
+    const selectElement = event.target as HTMLSelectElement;
+    this.userService.setUser(selectElement.value as UserType);
+  }  
 }
