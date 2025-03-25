@@ -1,30 +1,19 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { AppComponent } from './app.component';
 import { AccueilComponent } from './accueil/accueil.component';
-import { CheckinComponent } from './checkin/checkin.component';
-import { AdminComponent } from './admin/admin.component';
+import { routes } from './app.routes';
 
 @NgModule({
-  // ⛔ NE DÉCLARE PAS DE STANDALONE COMPONENT ICI
-  declarations: [],
+  declarations: [
+    AccueilComponent // ✅ seulement les composants non-standalone
+  ],
   imports: [
     BrowserModule,
-    FormsModule,
-    AppComponent,
-    AccueilComponent,
-    CheckinComponent,
-    AdminComponent,
-    RouterModule.forRoot([
-      { path: '', component: AccueilComponent },
-      { path: 'checkin', component: CheckinComponent },
-      { path: 'admin', component: AdminComponent }
-    ])
+    RouterModule.forRoot(routes)
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  // ❌ PAS DE AppComponent ici car il est standalone
+  bootstrap: [] // ❌ rien ici non plus si tu démarres avec main.ts
 })
 export class AppModule { }
