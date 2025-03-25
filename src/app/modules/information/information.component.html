@@ -1,42 +1,37 @@
 <div class="container mt-5">
-  <!-- FREE TOUR -->
-  <h2 class="text-primary">🏨 Bienvenue à l'Hôtel Intelligent</h2>
+  <h2 class="text-primary">🏠 Bienvenue sur Residia</h2>
   <p class="lead">{{ freeTourText }}</p>
-  <p class="text-muted">Découvrez nos services, nos actualités locales et explorez librement notre plateforme.</p>
 
   <hr>
 
-  <!-- RECHERCHE D'INFORMATIONS -->
-  <h4>🔎 Recherche d'informations</h4>
+  <h4>🔎 Recherche d'activités</h4>
   <div class="row mb-3">
     <div class="col-md-4">
       <label for="filtreType" class="form-label">Type d'information</label>
-      <select id="filtreType" class="form-select" [(ngModel)]="filtreType">
+      <select id="filtreType" class="form-select" [(ngModel)]="filtreType" (change)="appliquerFiltres()">
         <option value="">Tous</option>
         <option value="activité">Activité</option>
-        <option value="service">Service</option>
-        <option value="équipement">Équipement</option>
         <option value="animation">Animation</option>
+        <option value="équipement">Équipement</option>
+        <option value="événement">Événement</option>
+        <option value="service">Service</option>
       </select>
     </div>
+
     <div class="col-md-4">
       <label for="filtreTexte" class="form-label">Mot-clé</label>
-      <input id="filtreTexte" type="text" class="form-control" placeholder="Ex: concert, spa..." [(ngModel)]="filtreTexte">
-    </div>
-    <div class="col-md-4 d-flex align-items-end">
-      <button class="btn btn-outline-primary w-100" (click)="appliquerFiltres()">Rechercher</button>
+      <input id="filtreTexte" type="text" class="form-control" placeholder="Ex: yoga, cuisine..."
+        [(ngModel)]="filtreTexte" (input)="appliquerFiltres()">
     </div>
   </div>
 
-  <!-- RÉSULTATS -->
   <div class="mt-3">
     <h5>📋 Résultats :</h5>
     <div *ngFor="let info of resultatsFiltres" class="card mb-2">
       <div class="card-body">
         <h5 class="card-title">{{ info.titre }}</h5>
         <p class="card-text">{{ info.description }}</p>
-        <span class="badge bg-info text-dark me-2">{{ info.categorie }}</span>
-        <span class="badge bg-secondary text-uppercase">{{ info.type }}</span>
+        <span class="badge bg-info text-dark text-uppercase">{{ info.type }}</span>
       </div>
     </div>
     <div *ngIf="resultatsFiltres.length === 0" class="text-muted">Aucun résultat trouvé.</div>
@@ -44,12 +39,61 @@
 
   <hr>
 
-  <!-- INSCRIPTION -->
-  <h4>📝 Inscription</h4>
-  <form (submit)="inscription(email.value); email.value=''; $event.preventDefault()">
-    <div class="input-group w-50">
-      <input #email type="email" class="form-control" placeholder="Entrez votre email" required>
-      <button type="submit" class="btn btn-primary">S'inscrire</button>
+  <h3 class="mt-5 text-center text-success">🌟 Postulez à Residia !</h3>
+  <p class="text-center mb-4">Rejoignez notre communauté et participez à la vie de la résidence intelligente.</p>
+
+  <form (ngSubmit)="postuler()" #formRef="ngForm" class="card p-4 shadow-sm">
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="prenom" class="form-label">Prénom</label>
+        <input id="prenom" name="prenom" class="form-control" required [(ngModel)]="form.prenom">
+      </div>
+      <div class="col-md-6">
+        <label for="nom" class="form-label">Nom</label>
+        <input id="nom" name="nom" class="form-control" required [(ngModel)]="form.nom">
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="pseudo" class="form-label">Pseudonyme</label>
+      <input id="pseudo" name="pseudo" class="form-control" required [(ngModel)]="form.pseudo">
+    </div>
+
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input id="email" name="email" type="email" class="form-control" required [(ngModel)]="form.email">
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label for="genre" class="form-label">Genre</label>
+        <select id="genre" name="genre" class="form-select" required [(ngModel)]="form.genre">
+          <option value="" disabled selected>Sélectionner</option>
+          <option value="Homme">Homme</option>
+          <option value="Femme">Femme</option>
+          <option value="Autre">Autre</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label for="age" class="form-label">Âge</label>
+        <input id="age" name="age" type="number" class="form-control" required [(ngModel)]="form.age">
+      </div>
+      <div class="col-md-4">
+        <label for="dob" class="form-label">Date de naissance</label>
+        <input id="dob" name="dob" type="date" class="form-control" required [(ngModel)]="form.dob">
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="motivation" class="form-label">Pourquoi souhaitez-vous rejoindre Residia ?</label>
+      <textarea id="motivation" name="motivation" rows="4" class="form-control"
+        [(ngModel)]="form.motivation" required></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success w-100">Envoyer ma candidature</button>
+
+    <div *ngIf="formSubmitted" class="alert alert-success mt-3 text-center">
+      ✅ Votre candidature a bien été envoyée ! L’équipe Residia vous contactera bientôt.
     </div>
   </form>
 </div>

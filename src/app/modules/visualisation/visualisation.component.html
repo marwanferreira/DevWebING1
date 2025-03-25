@@ -1,1 +1,49 @@
-<h2>Bienvenue dans la visualisation</h2>
+<div class="container mt-4">
+    <h2>👤 Mon Profil</h2>
+  
+    <div *ngIf="profile" class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Partie publique</h5>
+        <img [src]="profile.profilePhoto" class="rounded mb-2" width="100" />
+        <p><strong>Pseudonyme :</strong> {{ profile.pseudonym }}</p>
+        <p><strong>Sexe :</strong> {{ profile.gender }}</p>
+        <p><strong>Date de naissance :</strong> {{ profile.birthdate }}</p>
+        <p><strong>Type de membre :</strong> {{ profile.memberType }}</p>
+  
+        <hr>
+        <h5 class="card-title">Partie privée</h5>
+        <div class="mb-3">
+          <label>Nom</label>
+          <input [(ngModel)]="profile.name" class="form-control" />
+        </div>
+        <div class="mb-3">
+          <label>Prénom</label>
+          <input [(ngModel)]="profile.surname" class="form-control" />
+        </div>
+        <button class="btn btn-success btn-sm" (click)="updatePrivateInfo()">💾 Enregistrer</button>
+  
+        <hr>
+        <div class="mb-3">
+          <label>Changer le mot de passe</label>
+          <input [(ngModel)]="newPassword" class="form-control" type="password" />
+        </div>
+        <button class="btn btn-warning btn-sm" (click)="changePassword()">🔐 Mettre à jour</button>
+      </div>
+    </div>
+  
+    <h3>📋 Autres utilisateurs confirmés</h3>
+    <div class="row">
+      <div class="col-md-4 mb-3" *ngFor="let user of publicProfiles">
+        <div class="card">
+          <img [src]="user.profilePhoto" class="card-img-top" />
+          <div class="card-body">
+            <p class="card-text"><strong>{{ user.pseudonym }}</strong></p>
+            <p class="mb-0">Sexe : {{ user.gender }}</p>
+            <p class="mb-0">Naissance : {{ user.birthdate }}</p>
+            <p class="mb-0">Rôle : {{ user.memberType }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
