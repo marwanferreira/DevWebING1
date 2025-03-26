@@ -22,9 +22,10 @@ export class GestionCandidaturesComponent implements OnInit {
     private userService: UserService
   ) {}
 
-  ngOnInit(): void {
-    this.candidatures = this.applicationService.getCandidatures();
+  async ngOnInit(): Promise<void> {
+    this.candidatures = await this.applicationService.getCandidatures();
   }
+  
 
   approve(c: Candidature): void {
     const role = this.selectedRole[c.email];

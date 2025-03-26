@@ -17,10 +17,11 @@ export class VisualisationComponent {
 
   constructor(private userService: UserService) {}
 
-  ngOnInit(): void {
-    this.profile = this.userService.getCurrentProfile();
-    this.publicProfiles = this.userService.getPublicProfiles();
+  async ngOnInit(): Promise<void> {
+    this.profile = await this.userService.getCurrentProfile();
+    this.publicProfiles = await this.userService.getPublicProfiles();
   }
+  
 
   updatePrivateInfo(): void {
     if (this.profile) {
