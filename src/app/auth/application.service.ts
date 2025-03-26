@@ -1,36 +1,33 @@
 import { Injectable } from '@angular/core';
-
-export interface Candidature {
-  prenom: string;
-  nom: string;
-  pseudo: string;
-  email: string;
-  genre: string;
-  age: number;
-  dateNaissance: string;
-  typeMembre: string;
-  motivation: string;
-  dateSoumission: Date;
-}
+import { Firestore, collection, addDoc, getDocs, deleteDoc, doc } from '@angular/fire/firestore';
+import { Candidature } from '../candidature/candidature.model';
+import { collectionData } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApplicationService {
-  private candidatures: Candidature[] = [];
+  private collectionPath = 'candidatures';
 
-  addCandidature(candidat: Candidature) {
-    this.candidatures.push({
-      ...candidat,
-      dateSoumission: new Date()
-    });
+  constructor(private firestore: Firestore) {}
+
+  async addCandidature(c: Candidature): Promise<void> {
+    const ref = collection(this.firestore, this.collectionPath);
+    await addDoc(ref, c);
   }
 
-  getCandidatures(): Candidature[] {
-    return this.candidatures;
+  async getCandidatures(): Promise<Candidature[]> {
+    const ref = collection(this.firestore, this.collectionPath);
+    const snapshot = await getDocs(ref);
+    return snapshot.docs.map(doc => doc.data() as Candidature);
   }
 
-  deleteCandidature(email: string): void {
-    this.candidatures = this.candidatures.filter(c => c.email !== email);
+  async deleteCandidature(email: string): Promise<void> {
+    const ref = collection(this.firestore, this.collectionPath);
+    const snapshot = await getDocs(ref);
+    const match = snapshot.docs.find(d => (d.data() as Candidature).email === email);
+    if (match) {
+      await deleteDoc(doc(this.firestore, this.collectionPath, match.id));
+    }
   }
 }

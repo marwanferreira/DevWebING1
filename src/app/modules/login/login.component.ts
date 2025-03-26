@@ -16,17 +16,21 @@ export class LoginComponent {
   password = '';
   errorMessage = '';
 
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(private userService: UserService, private router: Router) {
+    console.log("Login component loaded");
+  }
 
-  login(): void {
-    const success = this.userService.login(this.email, this.password);
+  async login(): Promise<void> {
+    console.log("Login button clicked ✅");
 
+    const success = await this.userService.login(this.email, this.password);
     if (!success) {
       this.errorMessage = "Email ou mot de passe incorrect.";
       return;
     }
 
-    alert(`Bienvenue ! Vous êtes connecté en tant que ${this.userService.getUser()}.`);
+    const role = this.userService.getUser();
+    alert(`Bienvenue ! Vous êtes connecté en tant que ${role}.`);
     this.router.navigate(['/']);
   }
 }

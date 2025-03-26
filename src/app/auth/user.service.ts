@@ -1,4 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import {
+  Firestore,
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  where,
+  collectionData
+} from '@angular/fire/firestore';
 import { Candidature } from '../candidature/candidature.model';
 
 export type UserType = 'visiteur' | 'simple' | 'complexe' | 'admin';
@@ -20,53 +29,9 @@ export interface UserProfile {
   providedIn: 'root'
 })
 export class UserService {
+  private firestore: Firestore = inject(Firestore); // ✅ Proper injection
   private currentUser: UserType = 'visiteur';
   private loggedInEmail: string | null = null;
-
-  private userDatabase: UserProfile[] = [
-    {
-      email: 'john.doe@example.com',
-      password: '123456',
-      role: 'simple',
-      name: 'John',
-      surname: 'Doe',
-      pseudonym: 'johnd',
-      gender: 'Homme',
-      birthdate: '1995-05-20',
-      memberType: 'Développeur',
-      profilePhoto: 'https://i.pravatar.cc/150?u=john.doe@example.com'
-    },
-    {
-      email: 'alice.smith@example.com',
-      password: '123456',
-      role: 'complexe',
-      name: 'Alice',
-      surname: 'Smith',
-      pseudonym: 'aliceS',
-      gender: 'Femme',
-      birthdate: '1992-11-03',
-      memberType: 'Testeur',
-      profilePhoto: 'https://i.pravatar.cc/150?u=alice.smith@example.com'
-    },
-    {
-      email: 'admin@residia.com',
-      password: 'adminpass',
-      role: 'admin',
-      name: 'Admin',
-      surname: 'Residia',
-      pseudonym: 'adminUser',
-      gender: 'Autre',
-      birthdate: '1990-01-01',
-      memberType: 'Directeur',
-      profilePhoto: 'https://i.pravatar.cc/150?u=admin@residia.com'
-    }
-  ];
-
-  private confirmedUsers: string[] = [
-    'john.doe@example.com',
-    'alice.smith@example.com',
-    'admin@residia.com'
-  ];
 
   setUser(type: UserType) {
     this.currentUser = type;
@@ -87,53 +52,52 @@ export class UserService {
     this.loggedInEmail = null;
   }
 
-  login(email: string, password: string): boolean {
-    const user = this.userDatabase.find(
-      u => u.email === email.trim().toLowerCase() && u.password === password
-    );
+  async login(email: string, password: string): Promise<boolean> {
+    const usersRef = collection(this.firestore, 'users');
+    const q = query(usersRef, where('email', '==', email.trim().toLowerCase()));
+    const snapshot = await getDocs(q); // ✅ Now injected properly
 
-    if (!user) return false;
+    if (snapshot.empty) return false;
+
+    const user = snapshot.docs[0].data() as UserProfile;
+
+    if (user.password !== password) return false;
 
     this.setUser(user.role);
     this.loggedInEmail = user.email;
     return true;
   }
 
-  getCurrentProfile(): UserProfile | null {
+  async getCurrentProfile(): Promise<UserProfile | null> {
     if (!this.loggedInEmail) return null;
-    return this.userDatabase.find(u => u.email === this.loggedInEmail) || null;
+
+    const usersRef = collection(this.firestore, 'users');
+    const q = query(usersRef, where('email', '==', this.loggedInEmail));
+    const snapshot = await getDocs(q);
+
+    return snapshot.empty ? null : (snapshot.docs[0].data() as UserProfile);
   }
 
-  updatePrivateInfo(updated: Partial<UserProfile>) {
-    const user = this.getCurrentProfile();
-    if (user) {
-      Object.assign(user, updated);
-    }
-  }
+  async getPublicProfiles(): Promise<Partial<UserProfile>[]> {
+    const usersRef = collection(this.firestore, 'users');
+    const snapshot = await getDocs(usersRef);
 
-  updatePassword(newPassword: string) {
-    const user = this.getCurrentProfile();
-    if (user) {
-      user.password = newPassword;
-    }
-  }
-
-  getPublicProfiles(): Partial<UserProfile>[] {
-    return this.userDatabase
-      .filter(u => this.confirmedUsers.includes(u.email))
-      .map(u => ({
+    return snapshot.docs.map(doc => {
+      const u = doc.data() as UserProfile;
+      return {
         pseudonym: u.pseudonym,
         gender: u.gender,
         birthdate: u.birthdate,
         memberType: u.memberType,
         profilePhoto: u.profilePhoto
-      }));
+      };
+    });
   }
 
-  addUserFromCandidature(c: Candidature, role: UserType): void {
+  async addUserFromCandidature(c: Candidature, role: UserType): Promise<void> {
     const newUser: UserProfile = {
       email: c.email,
-      password: 'default123', // 🔐 Temporary password
+      password: 'default123',
       role,
       name: c.prenom,
       surname: c.nom,
@@ -144,7 +108,15 @@ export class UserService {
       profilePhoto: `https://i.pravatar.cc/150?u=${c.email}`
     };
 
-    this.userDatabase.push(newUser);
-    this.confirmedUsers.push(c.email);
+    const usersRef = collection(this.firestore, 'users');
+    await addDoc(usersRef, newUser);
+  }
+
+  async updatePassword(newPassword: string): Promise<void> {
+    // Optional — not yet implemented
+  }
+
+  async updatePrivateInfo(updated: Partial<UserProfile>): Promise<void> {
+    // Optional — not yet implemented
   }
 }
