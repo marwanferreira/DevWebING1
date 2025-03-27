@@ -15,6 +15,9 @@ import { Candidature } from '../../candidature/candidature.model';
 export class GestionCandidaturesComponent implements OnInit {
   candidatures: Candidature[] = [];
   selectedRole: { [email: string]: UserType } = {};
+  selectedRoom: { [email: string]: number | null } = {};
+
+  takenRooms: number[] = [];
 
   constructor(
     private applicationService: ApplicationService,
@@ -23,32 +26,44 @@ export class GestionCandidaturesComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.candidatures = await this.applicationService.getCandidatures();
+    this.takenRooms = await this.userService.getTakenRooms();
+  }
+
+  getAvailableRooms(): number[] {
+    const allRooms = Array.from({ length: 10 }, (_, i) => i + 1);
+    return allRooms.filter(room => !this.takenRooms.includes(room));
   }
 
   async approve(c: Candidature): Promise<void> {
     const role = this.selectedRole[c.email];
+    const room = this.selectedRoom[c.email];
+
     if (!role) {
-      alert("Merci de sélectionner un rôle pour ce candidat.");
+      alert("Merci de sélectionner un rôle.");
       return;
     }
 
-    await this.userService.addUserFromCandidature(c, role);
-
-    // ✅ Use the Firestore doc ID for deletion
-    if (c.id) {
-      await this.applicationService.deleteCandidature(c.id);
+    if (!room) {
+      alert("Merci de sélectionner une chambre disponible.");
+      return;
     }
 
-    alert(`✅ Candidat ${c.nom} approuvé avec le rôle ${role}. Un email de confirmation a été simulé.`);
-    await this.ngOnInit(); // refresh
+    if (this.takenRooms.includes(room)) {
+      alert("Cette chambre est déjà attribuée.");
+      return;
+    }
+
+    await this.userService.addUserFromCandidature(c, role, room);
+    await this.applicationService.deleteCandidature(c.id!);
+    this.takenRooms.push(room);
+
+    alert(`✅ ${c.nom} a été accepté avec le rôle ${role} en chambre ${room}.`);
+    await this.ngOnInit();
   }
 
   async reject(c: Candidature): Promise<void> {
-    if (c.id) {
-      await this.applicationService.deleteCandidature(c.id);
-    }
-
+    await this.applicationService.deleteCandidature(c.id!);
     alert(`❌ Candidature de ${c.nom} rejetée.`);
-    await this.ngOnInit(); // refresh
+    await this.ngOnInit();
   }
 }
