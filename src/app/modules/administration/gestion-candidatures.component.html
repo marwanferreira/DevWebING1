@@ -1,32 +1,42 @@
-<div class="container mt-4">
-  <h2 class="mb-4">📋 Candidatures en attente</h2>
+<h2 class="mb-4">Gestion des candidatures</h2>
 
-  <div *ngIf="candidatures.length === 0" class="alert alert-info">
-    Aucune candidature en attente pour le moment.
-  </div>
+<div *ngFor="let c of candidatures" class="card mb-3 p-3">
+  <h5>{{ c.prenom }} {{ c.nom }}</h5>
+  <p><strong>Email :</strong> {{ c.email }}</p>
+  <p><strong>Date de naissance :</strong> {{ c.dateNaissance | date }}</p>
+  <p><strong>Genre :</strong> {{ c.genre }}</p>
+  <p><strong>Type de membre :</strong> {{ c.typeMembre }}</p>
+  <p><strong>Motivation :</strong> {{ c.motivation }}</p>
 
-  <div *ngFor="let c of candidatures" class="card mb-3 p-3">
-    <h5>{{ c.prenom }} {{ c.nom }} ({{ c.pseudo }})</h5>
-    <p><strong>Email :</strong> {{ c.email }}</p>
-    <p><strong>Genre :</strong> {{ c.genre }}</p>
-    <p><strong>Âge :</strong> {{ c.age }}</p>
-    <p><strong>Date de naissance :</strong> {{ c.dateNaissance | date:'longDate' }}</p>
-    <p><strong>Rôle souhaité :</strong> {{ c.typeMembre }}</p>
-    <p><strong>Motivation :</strong> {{ c.motivation }}</p>
-    <p><em>Soumis le {{ c.dateSoumission | date:'short' }}</em></p>
+  <div class="d-flex flex-column flex-md-row align-items-start gap-2 mt-3">
 
-    <div class="mt-3">
-      <label for="roleSelect" class="form-label">Choisir un rôle pour ce candidat :</label>
-      <select class="form-select w-auto mb-3"
-              [(ngModel)]="selectedRole[c.email]">
-        <option [ngValue]="undefined">-- Choisir --</option>
+    <!-- Select Role -->
+    <div class="flex-fill">
+      <label class="form-label">Rôle</label>
+      <select class="form-select" [(ngModel)]="selectedRole[c.email]">
+        <option [ngValue]="null">Sélectionner un rôle</option>
         <option value="simple">Simple</option>
         <option value="complexe">Complexe</option>
         <option value="admin">Admin</option>
       </select>
+    </div>
 
-      <button class="btn btn-success me-2" (click)="approve(c)">✅ Accepter</button>
+    <!-- Select Room -->
+    <div class="flex-fill">
+      <label class="form-label">Chambre</label>
+      <select class="form-select" [(ngModel)]="selectedRoom[c.email]">
+        <option [ngValue]="null">Attribuer une chambre</option>
+        <option *ngFor="let room of getAvailableRooms()" [value]="room">
+          Chambre {{ room }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="d-flex gap-2 mt-2 mt-md-4">
+      <button class="btn btn-success" (click)="approve(c)">✅ Accepter</button>
       <button class="btn btn-danger" (click)="reject(c)">❌ Rejeter</button>
     </div>
+
   </div>
 </div>

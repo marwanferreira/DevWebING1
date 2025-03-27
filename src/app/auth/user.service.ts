@@ -6,6 +6,7 @@ import {
   addDoc,
   query,
   where,
+  doc,
   updateDoc
 } from '@angular/fire/firestore';
 import { Candidature } from '../candidature/candidature.model';
@@ -23,6 +24,7 @@ export interface UserProfile {
   birthdate: string;
   memberType: string;
   profilePhoto: string;
+  roomNumber: number | null; // ✅ NEW FIELD
 }
 
 @Injectable({
@@ -95,16 +97,7 @@ export class UserService {
     });
   }
 
-  async addUserFromCandidature(c: Candidature, role: UserType): Promise<void> {
-    const usersRef = collection(this.firestore, 'users');
-    const q = query(usersRef, where('email', '==', c.email));
-    const existing = await getDocs(q);
-  
-    if (!existing.empty) {
-      console.warn(`User ${c.email} already exists.`);
-      return; // 🔒 Stop if already exists
-    }
-  
+  async addUserFromCandidature(c: Candidature, role: UserType, roomNumber: number): Promise<void> {
     const newUser: UserProfile = {
       email: c.email,
       password: 'default123',
@@ -115,33 +108,39 @@ export class UserService {
       gender: c.genre,
       birthdate: c.dateNaissance,
       memberType: c.typeMembre,
-      profilePhoto: `https://i.pravatar.cc/150?u=${c.email}`
+      profilePhoto: `https://i.pravatar.cc/150?u=${c.email}`,
+      roomNumber: roomNumber // ✅ Assign room here
     };
-  
-    await addDoc(usersRef, newUser);
+
+    const ref = collection(this.firestore, 'users');
+    await addDoc(ref, newUser);
   }
 
   async updatePassword(newPassword: string): Promise<void> {
-    if (!this.loggedInEmail) return;
-
-    const ref = collection(this.firestore, 'users');
-    const q = query(ref, where('email', '==', this.loggedInEmail));
-    const snapshot = await getDocs(q);
-    if (snapshot.empty) return;
-
-    const userDoc = snapshot.docs[0].ref;
-    await updateDoc(userDoc, { password: newPassword });
+    // Optional — not implemented yet
   }
 
   async updatePrivateInfo(updated: Partial<UserProfile>): Promise<void> {
-    if (!this.loggedInEmail) return;
-
-    const ref = collection(this.firestore, 'users');
-    const q = query(ref, where('email', '==', this.loggedInEmail));
-    const snapshot = await getDocs(q);
-    if (snapshot.empty) return;
-
-    const userDoc = snapshot.docs[0].ref;
-    await updateDoc(userDoc, updated);
+    // Optional — not implemented yet
   }
+  async getTakenRooms(): Promise<number[]> {
+    const ref = collection(this.firestore, 'users');
+    const snapshot = await getDocs(ref);
+  
+    const rooms: number[] = [];
+    snapshot.docs.forEach(doc => {
+      const user = doc.data() as UserProfile;
+      if (user.roomNumber !== null && user.roomNumber !== undefined) {
+        rooms.push(user.roomNumber);
+      }
+    });
+  
+    return rooms;
+  }
+  async getAvailableRooms(): Promise<number[]> {
+    const taken = await this.getTakenRooms();
+    const allRooms = Array.from({ length: 10 }, (_, i) => i + 1);
+    return allRooms.filter(room => !taken.includes(room));
+  }
+  
 }
