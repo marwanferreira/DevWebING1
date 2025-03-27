@@ -4,10 +4,6 @@
   background-position: center;
   height: 100vh;
   padding: 0 20px;
-  background-color: red; /* Fond rouge pour tester */
-  color: #fff;
-}
-
-.hero-section {
-  background-color: rgba(0, 0, 0, 0.5); /* Légère superposition sombre pour améliorer la lisibilité */
+  background-color: green /* Légère superposition sombre pour améliorer la lisibilité */
+  color: blueviolet; /* Police rouge */
 }
