@@ -1,33 +1,35 @@
 import { Injectable } from '@angular/core';
 import { Firestore, collection, addDoc, getDocs, deleteDoc, doc } from '@angular/fire/firestore';
 import { Candidature } from '../candidature/candidature.model';
-import { collectionData } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApplicationService {
-  private collectionPath = 'candidatures';
 
   constructor(private firestore: Firestore) {}
 
-  async addCandidature(c: Candidature): Promise<void> {
-    const ref = collection(this.firestore, this.collectionPath);
-    await addDoc(ref, c);
+  // Add a new candidature to Firestore
+  async addCandidature(candidature: Candidature): Promise<void> {
+    const ref = collection(this.firestore, 'candidatures');
+    await addDoc(ref, candidature);
   }
 
+  // Fetch all candidatures from Firestore
   async getCandidatures(): Promise<Candidature[]> {
-    const ref = collection(this.firestore, this.collectionPath);
+    const ref = collection(this.firestore, 'candidatures');
     const snapshot = await getDocs(ref);
-    return snapshot.docs.map(doc => doc.data() as Candidature);
+    return snapshot.docs.map(doc => {
+      return {
+        ...(doc.data() as Candidature),
+        id: doc.id // if you want to track the doc id
+      };
+    });
   }
 
-  async deleteCandidature(email: string): Promise<void> {
-    const ref = collection(this.firestore, this.collectionPath);
-    const snapshot = await getDocs(ref);
-    const match = snapshot.docs.find(d => (d.data() as Candidature).email === email);
-    if (match) {
-      await deleteDoc(doc(this.firestore, this.collectionPath, match.id));
-    }
+  // Optional: Delete a candidature by its document ID
+  async deleteCandidature(docId: string): Promise<void> {
+    const ref = doc(this.firestore, `candidatures/${docId}`);
+    await deleteDoc(ref);
   }
 }

@@ -1,12 +1,12 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
   Firestore,
   collection,
-  addDoc,
   getDocs,
+  addDoc,
   query,
   where,
-  collectionData
+  updateDoc
 } from '@angular/fire/firestore';
 import { Candidature } from '../candidature/candidature.model';
 
@@ -29,9 +29,10 @@ export interface UserProfile {
   providedIn: 'root'
 })
 export class UserService {
-  private firestore: Firestore = inject(Firestore); // ✅ Proper injection
   private currentUser: UserType = 'visiteur';
   private loggedInEmail: string | null = null;
+
+  constructor(private firestore: Firestore) {}
 
   setUser(type: UserType) {
     this.currentUser = type;
@@ -53,9 +54,9 @@ export class UserService {
   }
 
   async login(email: string, password: string): Promise<boolean> {
-    const usersRef = collection(this.firestore, 'users');
-    const q = query(usersRef, where('email', '==', email.trim().toLowerCase()));
-    const snapshot = await getDocs(q); // ✅ Now injected properly
+    const ref = collection(this.firestore, 'users');
+    const q = query(ref, where('email', '==', email.trim().toLowerCase()));
+    const snapshot = await getDocs(q);
 
     if (snapshot.empty) return false;
 
@@ -71,16 +72,16 @@ export class UserService {
   async getCurrentProfile(): Promise<UserProfile | null> {
     if (!this.loggedInEmail) return null;
 
-    const usersRef = collection(this.firestore, 'users');
-    const q = query(usersRef, where('email', '==', this.loggedInEmail));
+    const ref = collection(this.firestore, 'users');
+    const q = query(ref, where('email', '==', this.loggedInEmail));
     const snapshot = await getDocs(q);
 
     return snapshot.empty ? null : (snapshot.docs[0].data() as UserProfile);
   }
 
   async getPublicProfiles(): Promise<Partial<UserProfile>[]> {
-    const usersRef = collection(this.firestore, 'users');
-    const snapshot = await getDocs(usersRef);
+    const ref = collection(this.firestore, 'users');
+    const snapshot = await getDocs(ref);
 
     return snapshot.docs.map(doc => {
       const u = doc.data() as UserProfile;
@@ -95,6 +96,15 @@ export class UserService {
   }
 
   async addUserFromCandidature(c: Candidature, role: UserType): Promise<void> {
+    const usersRef = collection(this.firestore, 'users');
+    const q = query(usersRef, where('email', '==', c.email));
+    const existing = await getDocs(q);
+  
+    if (!existing.empty) {
+      console.warn(`User ${c.email} already exists.`);
+      return; // 🔒 Stop if already exists
+    }
+  
     const newUser: UserProfile = {
       email: c.email,
       password: 'default123',
@@ -107,16 +117,31 @@ export class UserService {
       memberType: c.typeMembre,
       profilePhoto: `https://i.pravatar.cc/150?u=${c.email}`
     };
-
-    const usersRef = collection(this.firestore, 'users');
+  
     await addDoc(usersRef, newUser);
   }
 
   async updatePassword(newPassword: string): Promise<void> {
-    // Optional — not yet implemented
+    if (!this.loggedInEmail) return;
+
+    const ref = collection(this.firestore, 'users');
+    const q = query(ref, where('email', '==', this.loggedInEmail));
+    const snapshot = await getDocs(q);
+    if (snapshot.empty) return;
+
+    const userDoc = snapshot.docs[0].ref;
+    await updateDoc(userDoc, { password: newPassword });
   }
 
   async updatePrivateInfo(updated: Partial<UserProfile>): Promise<void> {
-    // Optional — not yet implemented
+    if (!this.loggedInEmail) return;
+
+    const ref = collection(this.firestore, 'users');
+    const q = query(ref, where('email', '==', this.loggedInEmail));
+    const snapshot = await getDocs(q);
+    if (snapshot.empty) return;
+
+    const userDoc = snapshot.docs[0].ref;
+    await updateDoc(userDoc, updated);
   }
 }

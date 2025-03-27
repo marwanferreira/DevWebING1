@@ -1,7 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { UserService } from '../../auth/user.service';
 import { ApplicationService } from '../../auth/application.service';
 
 @Component({
@@ -11,8 +10,8 @@ import { ApplicationService } from '../../auth/application.service';
   templateUrl: './information.component.html',
   styleUrls: ['./information.component.css']
 })
-export class InformationComponent {
-  freeTourText = "Bienvenue sur Residia, votre résidence intelligente ! Découvrez les activités communautaires, les espaces partagés et les événements organisés pour nos résidents. Explorez les nouveautés ci-dessous.";
+export class InformationComponent implements OnInit {
+  freeTourText = "Bienvenue sur Residia, la résidence connectée. Explorez les événements, activités et espaces partagés proposés à nos résidents !";
 
   infos = [
     { titre: 'Séance de Yoga Matinale', categorie: 'bien-être', type: 'activité', description: 'Tous les jours à 7h dans la salle polyvalente' },
@@ -43,12 +42,9 @@ export class InformationComponent {
 
   formSubmitted = false;
 
-  constructor(
-    public userService: UserService,
-    private applicationService: ApplicationService
-  ) {}
+  constructor(private applicationService: ApplicationService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.appliquerFiltres();
   }
 
@@ -64,10 +60,10 @@ export class InformationComponent {
     });
   }
 
-  postuler(): void {
-    this.applicationService.addCandidature({
+  async postuler(): Promise<void> {
+    await this.applicationService.addCandidature({
       ...this.form,
-      dateSoumission: new Date()
+      dateSoumission: new Date().toISOString()
     });
     this.formSubmitted = true;
   }

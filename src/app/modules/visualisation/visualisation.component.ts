@@ -13,7 +13,7 @@ import { UserService, UserProfile } from '../../auth/user.service';
 export class VisualisationComponent {
   profile: UserProfile | null = null;
   newPassword = '';
-  publicProfiles: any[] = [];
+  publicProfiles: Partial<UserProfile>[] = [];
 
   constructor(private userService: UserService) {}
 
@@ -21,11 +21,10 @@ export class VisualisationComponent {
     this.profile = await this.userService.getCurrentProfile();
     this.publicProfiles = await this.userService.getPublicProfiles();
   }
-  
 
-  updatePrivateInfo(): void {
+  async updatePrivateInfo(): Promise<void> {
     if (this.profile) {
-      this.userService.updatePrivateInfo({
+      await this.userService.updatePrivateInfo({
         name: this.profile.name,
         surname: this.profile.surname
       });
@@ -33,9 +32,9 @@ export class VisualisationComponent {
     }
   }
 
-  changePassword(): void {
+  async changePassword(): Promise<void> {
     if (this.newPassword.trim()) {
-      this.userService.updatePassword(this.newPassword.trim());
+      await this.userService.updatePassword(this.newPassword.trim());
       this.newPassword = '';
       alert('Mot de passe mis à jour !');
     }
