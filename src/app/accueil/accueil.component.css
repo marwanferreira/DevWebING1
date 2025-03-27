@@ -1,8 +1,13 @@
 .hero {
-    background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c');
-    background-size: cover;
-    background-position: center;
-    height: 100vh;
-    padding: 0 20px;
-  }
-  
+  background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c');
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  padding: 0 20px;
+  background-color: red; /* Fond rouge pour tester */
+  color: #fff;
+}
+
+.hero-section {
+  background-color: rgba(0, 0, 0, 0.5); /* Légère superposition sombre pour améliorer la lisibilité */
+}
