@@ -1,63 +1,10 @@
-var __defProp = Object.defineProperty;
-var __defProps = Object.defineProperties;
-var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
-var __getOwnPropSymbols = Object.getOwnPropertySymbols;
-var __getProtoOf = Object.getPrototypeOf;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __propIsEnum = Object.prototype.propertyIsEnumerable;
-var __reflectGet = Reflect.get;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __spreadValues = (a, b) => {
-  for (var prop in b ||= {})
-    if (__hasOwnProp.call(b, prop))
-      __defNormalProp(a, prop, b[prop]);
-  if (__getOwnPropSymbols)
-    for (var prop of __getOwnPropSymbols(b)) {
-      if (__propIsEnum.call(b, prop))
-        __defNormalProp(a, prop, b[prop]);
-    }
-  return a;
-};
-var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
-var __objRest = (source, exclude) => {
-  var target = {};
-  for (var prop in source)
-    if (__hasOwnProp.call(source, prop) && exclude.indexOf(prop) < 0)
-      target[prop] = source[prop];
-  if (source != null && __getOwnPropSymbols)
-    for (var prop of __getOwnPropSymbols(source)) {
-      if (exclude.indexOf(prop) < 0 && __propIsEnum.call(source, prop))
-        target[prop] = source[prop];
-    }
-  return target;
-};
-var __superGet = (cls, obj, key) => __reflectGet(__getProtoOf(cls), key, obj);
-var __async = (__this, __arguments, generator) => {
-  return new Promise((resolve, reject) => {
-    var fulfilled = (value) => {
-      try {
-        step(generator.next(value));
-      } catch (e) {
-        reject(e);
-      }
-    };
-    var rejected = (value) => {
-      try {
-        step(generator.throw(value));
-      } catch (e) {
-        reject(e);
-      }
-    };
-    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
-    step((generator = generator.apply(__this, __arguments)).next());
-  });
-};
+import {
+  __async,
+  __spreadProps,
+  __spreadValues
+} from "./chunk-5K356HEJ.js";
 
-// node_modules/@angular/core/fesm2022/weak_ref-DrMdAIDh.mjs
-function setAlternateWeakRefImpl(impl) {
-}
-
-// node_modules/@angular/core/fesm2022/primitives/signals.mjs
+// node_modules/@angular/core/fesm2022/untracked-CS7WUAzb.mjs
 function defaultEquals(a, b) {
   return Object.is(a, b);
 }
@@ -403,6 +350,7 @@ var LINKED_SIGNAL_NODE = (() => {
     dirty: true,
     error: null,
     equal: defaultEquals,
+    kind: "linkedSignal",
     producerMustRecompute(node) {
       return node.value === UNSET || node.value === COMPUTING;
     },
@@ -437,6 +385,30 @@ var LINKED_SIGNAL_NODE = (() => {
     }
   });
 })();
+function setAlternateWeakRefImpl(impl) {
+}
+function untracked(nonReactiveReadsFn) {
+  const prevConsumer = setActiveConsumer(null);
+  try {
+    return nonReactiveReadsFn();
+  } finally {
+    setActiveConsumer(prevConsumer);
+  }
+}
+
+// node_modules/@angular/core/fesm2022/primitives/di.mjs
+var _currentInjector = void 0;
+function getCurrentInjector() {
+  return _currentInjector;
+}
+function setCurrentInjector(injector) {
+  const former = _currentInjector;
+  _currentInjector = injector;
+  return former;
+}
+var NOT_FOUND = Symbol("NotFound");
+
+// node_modules/@angular/core/fesm2022/primitives/signals.mjs
 function createWatch(fn, schedule, allowSignalWrites) {
   const node = Object.create(WATCH_NODE);
   if (allowSignalWrites) {
@@ -504,26 +476,6 @@ var WATCH_NODE = (() => {
     cleanupFn: NOOP_CLEANUP_FN
   });
 })();
-function untracked(nonReactiveReadsFn) {
-  const prevConsumer = setActiveConsumer(null);
-  try {
-    return nonReactiveReadsFn();
-  } finally {
-    setActiveConsumer(prevConsumer);
-  }
-}
-
-// node_modules/@angular/core/fesm2022/primitives/di.mjs
-var _currentInjector = void 0;
-function getCurrentInjector() {
-  return _currentInjector;
-}
-function setCurrentInjector(injector) {
-  const former = _currentInjector;
-  _currentInjector = injector;
-  return former;
-}
-var NOT_FOUND = Symbol("NotFound");
 
 // node_modules/tslib/tslib.es6.mjs
 var extendStatics = function(d, b) {
@@ -12356,7 +12308,7 @@ function loadComponentRenderer(currentDef, tNode, lView) {
   }
   return lView[RENDERER];
 }
-function handleError(lView, error) {
+function handleError$1(lView, error) {
   const injector = lView[INJECTOR];
   const errorHandler = injector ? injector.get(ErrorHandler, null) : null;
   errorHandler && errorHandler.handleError(error);
@@ -13072,7 +13024,7 @@ function detectChangesInternal(lView, notifyErrorHandler = true, mode = 0) {
     detectChangesInViewWhileDirty(lView, mode);
   } catch (error) {
     if (notifyErrorHandler) {
-      handleError(lView, error);
+      handleError$1(lView, error);
     }
     throw error;
   } finally {
@@ -15839,7 +15791,7 @@ var ComponentFactory2 = class extends ComponentFactory$1 {
     try {
       const cmpDef = this.componentDef;
       ngDevMode && verifyNotAnOrphanComponent(cmpDef);
-      const tAttributes = rootSelectorOrNode ? ["ng-version", "19.2.3"] : (
+      const tAttributes = rootSelectorOrNode ? ["ng-version", "19.2.4"] : (
         // Extract attributes and classes from the first selector only to match VE behavior.
         extractAttrsAndClassesFromSelector(this.componentDef.selectors[0])
       );
@@ -17941,7 +17893,7 @@ function renderDeferBlockState(newState, tNode, lContainer, skipTimerScheduling 
     try {
       applyStateFn(newState, lDetails, lContainer, tNode, hostLView);
     } catch (error) {
-      handleError(hostLView, error);
+      handleError$1(hostLView, error);
     }
   }
 }
@@ -19785,7 +19737,7 @@ function triggerResourceLoading(tDetails, lView, tNode) {
       if (tDetails.errorTmplIndex === null) {
         const templateLocation = ngDevMode ? getTemplateLocationDetails(lView) : "";
         const error = new RuntimeError(-750, ngDevMode && `Loading dependencies for \`@defer\` block failed, but no \`@error\` block was configured${templateLocation}. Consider using the \`@error\` block to render an error state.`);
-        handleError(lView, error);
+        handleError$1(lView, error);
       }
     } else {
       tDetails.loadingState = DeferDependenciesLoadingState.COMPLETE;
@@ -23174,6 +23126,61 @@ function ɵɵi18nApply(index) {
 function ɵɵi18nPostprocess(message, replacements = {}) {
   return i18nPostprocess(message, replacements);
 }
+function wrapListener(tNode, lView, context2, listenerFn) {
+  return function wrapListenerIn_markDirtyAndPreventDefault(e) {
+    if (e === Function) {
+      return listenerFn;
+    }
+    const startView = isComponentHost(tNode) ? getComponentLViewByIndex(tNode.index, lView) : lView;
+    markViewDirty(
+      startView,
+      5
+      /* NotificationSource.Listener */
+    );
+    let result = executeListenerWithErrorHandling(lView, context2, listenerFn, e);
+    let nextListenerFn = wrapListenerIn_markDirtyAndPreventDefault.__ngNextListenerFn__;
+    while (nextListenerFn) {
+      result = executeListenerWithErrorHandling(lView, context2, nextListenerFn, e) && result;
+      nextListenerFn = nextListenerFn.__ngNextListenerFn__;
+    }
+    return result;
+  };
+}
+function executeListenerWithErrorHandling(lView, context2, listenerFn, e) {
+  const prevConsumer = setActiveConsumer(null);
+  try {
+    profiler(6, context2, listenerFn);
+    return listenerFn(e) !== false;
+  } catch (error) {
+    handleError(lView, error);
+    return false;
+  } finally {
+    profiler(7, context2, listenerFn);
+    setActiveConsumer(prevConsumer);
+  }
+}
+function handleError(lView, error) {
+  const injector = lView[INJECTOR];
+  const errorHandler = injector ? injector.get(ErrorHandler, null) : null;
+  errorHandler && errorHandler.handleError(error);
+}
+function listenToOutput(tNode, tView, lView, index, lookupName, eventName, listenerFn, lCleanup, tCleanup) {
+  ngDevMode && assertIndexInRange(lView, index);
+  const instance = lView[index];
+  const def = tView.data[index];
+  const propertyName = def.outputs[lookupName];
+  const output2 = instance[propertyName];
+  if (ngDevMode && !isOutputSubscribable(output2)) {
+    throw new Error(`@Output ${propertyName} not initialized in '${instance.constructor.name}'.`);
+  }
+  const subscription = output2.subscribe(listenerFn);
+  const idx = lCleanup.length;
+  lCleanup.push(listenerFn, subscription);
+  tCleanup && tCleanup.push(eventName, tNode.index, idx, -(idx + 1));
+}
+function isOutputSubscribable(value) {
+  return value != null && typeof value.subscribe === "function";
+}
 var stashEventListener = (el, eventName, listenerFn) => {
 };
 function setStashFn(fn) {
@@ -23265,56 +23272,6 @@ function listenerInternal(tView, lView, renderer, tNode, eventName, listenerFn, 
       }
     }
   }
-}
-function listenToOutput(tNode, tView, lView, index, lookupName, eventName, listenerFn, lCleanup, tCleanup) {
-  ngDevMode && assertIndexInRange(lView, index);
-  const instance = lView[index];
-  const def = tView.data[index];
-  const propertyName = def.outputs[lookupName];
-  const output2 = instance[propertyName];
-  if (ngDevMode && !isOutputSubscribable(output2)) {
-    throw new Error(`@Output ${propertyName} not initialized in '${instance.constructor.name}'.`);
-  }
-  const subscription = output2.subscribe(listenerFn);
-  const idx = lCleanup.length;
-  lCleanup.push(listenerFn, subscription);
-  tCleanup && tCleanup.push(eventName, tNode.index, idx, -(idx + 1));
-}
-function executeListenerWithErrorHandling(lView, context2, listenerFn, e) {
-  const prevConsumer = setActiveConsumer(null);
-  try {
-    profiler(6, context2, listenerFn);
-    return listenerFn(e) !== false;
-  } catch (error) {
-    handleError(lView, error);
-    return false;
-  } finally {
-    profiler(7, context2, listenerFn);
-    setActiveConsumer(prevConsumer);
-  }
-}
-function wrapListener(tNode, lView, context2, listenerFn) {
-  return function wrapListenerIn_markDirtyAndPreventDefault(e) {
-    if (e === Function) {
-      return listenerFn;
-    }
-    const startView = isComponentHost(tNode) ? getComponentLViewByIndex(tNode.index, lView) : lView;
-    markViewDirty(
-      startView,
-      5
-      /* NotificationSource.Listener */
-    );
-    let result = executeListenerWithErrorHandling(lView, context2, listenerFn, e);
-    let nextListenerFn = wrapListenerIn_markDirtyAndPreventDefault.__ngNextListenerFn__;
-    while (nextListenerFn) {
-      result = executeListenerWithErrorHandling(lView, context2, nextListenerFn, e) && result;
-      nextListenerFn = nextListenerFn.__ngNextListenerFn__;
-    }
-    return result;
-  };
-}
-function isOutputSubscribable(value) {
-  return value != null && typeof value.subscribe === "function";
 }
 function ɵɵnextContext(level = 1) {
   return nextContextImpl(level);
@@ -25402,7 +25359,7 @@ var Version = class {
     this.patch = parts.slice(2).join(".");
   }
 };
-var VERSION = new Version("19.2.3");
+var VERSION = new Version("19.2.4");
 var ModuleWithComponentFactories = class {
   ngModuleFactory;
   componentFactories;
@@ -29523,11 +29480,9 @@ var REQUEST_CONTEXT = new InjectionToken(typeof ngDevMode === "undefined" || ngD
 });
 
 export {
-  __spreadValues,
-  __spreadProps,
-  __objRest,
-  __superGet,
-  __async,
+  SIGNAL,
+  setAlternateWeakRefImpl,
+  setCurrentInjector,
   __rest,
   Subscription,
   pipe,
@@ -29571,9 +29526,6 @@ export {
   switchMap,
   takeUntil,
   tap,
-  setAlternateWeakRefImpl,
-  SIGNAL,
-  setCurrentInjector,
   XSS_SECURITY_URL,
   RuntimeError,
   formatRuntimeError,
@@ -30070,37 +30022,37 @@ export {
 };
 /*! Bundled license information:
 
-@angular/core/fesm2022/weak_ref-DrMdAIDh.mjs:
+@angular/core/fesm2022/untracked-CS7WUAzb.mjs:
   (**
-   * @license Angular v19.2.3
-   * (c) 2010-2025 Google LLC. https://angular.io/
-   * License: MIT
-   *)
-
-@angular/core/fesm2022/primitives/signals.mjs:
-  (**
-   * @license Angular v19.2.3
+   * @license Angular v19.2.4
    * (c) 2010-2025 Google LLC. https://angular.io/
    * License: MIT
    *)
 
 @angular/core/fesm2022/primitives/di.mjs:
   (**
-   * @license Angular v19.2.3
+   * @license Angular v19.2.4
+   * (c) 2010-2025 Google LLC. https://angular.io/
+   * License: MIT
+   *)
+
+@angular/core/fesm2022/primitives/signals.mjs:
+  (**
+   * @license Angular v19.2.4
    * (c) 2010-2025 Google LLC. https://angular.io/
    * License: MIT
    *)
 
 @angular/core/fesm2022/primitives/event-dispatch.mjs:
   (**
-   * @license Angular v19.2.3
+   * @license Angular v19.2.4
    * (c) 2010-2025 Google LLC. https://angular.io/
    * License: MIT
    *)
 
 @angular/core/fesm2022/core.mjs:
   (**
-   * @license Angular v19.2.3
+   * @license Angular v19.2.4
    * (c) 2010-2025 Google LLC. https://angular.io/
    * License: MIT
    *)
@@ -30121,4 +30073,4 @@ export {
    * found in the LICENSE file at https://angular.dev/license
    *)
 */
-//# sourceMappingURL=chunk-VQVBZD3Z.js.map
+//# sourceMappingURL=chunk-MCVMEQYC.js.map

@@ -8,7 +8,7 @@ import {
   isPlatformServer,
   parseCookieValue,
   setRootDomAdapter
-} from "./chunk-QYNGX76T.js";
+} from "./chunk-XRZXE44F.js";
 import {
   APP_BOOTSTRAP_LISTENER,
   APP_ID,
@@ -47,10 +47,6 @@ import {
   ViewEncapsulation,
   XSS_SECURITY_URL,
   ZONELESS_ENABLED,
-  __async,
-  __objRest,
-  __spreadProps,
-  __spreadValues,
   _global,
   _sanitizeHtml,
   _sanitizeUrl,
@@ -94,7 +90,13 @@ import {
   ɵɵdefineInjector,
   ɵɵdefineNgModule,
   ɵɵinject
-} from "./chunk-VQVBZD3Z.js";
+} from "./chunk-MCVMEQYC.js";
+import {
+  __async,
+  __objRest,
+  __spreadProps,
+  __spreadValues
+} from "./chunk-5K356HEJ.js";
 
 // node_modules/@angular/common/fesm2022/http.mjs
 var HttpHandler = class {
@@ -4395,7 +4397,7 @@ function provideClientHydration(...features) {
   }
   return makeEnvironmentProviders([typeof ngDevMode !== "undefined" && ngDevMode ? provideZoneJsCompatibilityDetector() : [], withDomHydration(), featuresKind.has(HydrationFeatureKind.NoHttpTransferCache) || hasHttpTransferCacheOptions ? [] : withHttpTransferCache({}), providers]);
 }
-var VERSION = new Version("19.2.3");
+var VERSION = new Version("19.2.4");
 
 export {
   BrowserDomAdapter,
@@ -4411,8 +4413,6 @@ export {
   bootstrapApplication,
   createApplication,
   provideProtractorTestingSupport,
-  initDomAdapter,
-  INTERNAL_BROWSER_PLATFORM_PROVIDERS,
   platformBrowser,
   BrowserModule,
   Meta,
@@ -4440,16 +4440,16 @@ export {
 
 @angular/common/fesm2022/http.mjs:
   (**
-   * @license Angular v19.2.3
+   * @license Angular v19.2.4
    * (c) 2010-2025 Google LLC. https://angular.io/
    * License: MIT
    *)
 
 @angular/platform-browser/fesm2022/platform-browser.mjs:
   (**
-   * @license Angular v19.2.3
+   * @license Angular v19.2.4
    * (c) 2010-2025 Google LLC. https://angular.io/
    * License: MIT
    *)
 */
-//# sourceMappingURL=chunk-3IGT2FUJ.js.map
+//# sourceMappingURL=chunk-UAMRT2WK.js.map

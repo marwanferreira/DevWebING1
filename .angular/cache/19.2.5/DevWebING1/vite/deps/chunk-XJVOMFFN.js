@@ -12,9 +12,6 @@ import {
   PendingTasks,
   VERSION,
   Version,
-  __async,
-  __spreadProps,
-  __spreadValues,
   assertInInjectionContext,
   asyncScheduler,
   concatMap,
@@ -33,7 +30,12 @@ import {
   ɵɵdefineInjector,
   ɵɵdefineNgModule,
   ɵɵinject
-} from "./chunk-VQVBZD3Z.js";
+} from "./chunk-MCVMEQYC.js";
+import {
+  __async,
+  __spreadProps,
+  __spreadValues
+} from "./chunk-5K356HEJ.js";
 
 // node_modules/@firebase/util/dist/postinstall.mjs
 var getDefaultsFromPostinstall = () => void 0;
@@ -2983,9 +2985,9 @@ firebase/app/dist/esm/index.esm.js:
 
 @angular/core/fesm2022/rxjs-interop.mjs:
   (**
-   * @license Angular v19.2.3
+   * @license Angular v19.2.4
    * (c) 2010-2025 Google LLC. https://angular.io/
    * License: MIT
    *)
 */
-//# sourceMappingURL=chunk-KWKWIT7W.js.map
+//# sourceMappingURL=chunk-XJVOMFFN.js.map
