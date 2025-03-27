@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import emailjs from '@emailjs/browser';
 import {
   Firestore,
   collection,
@@ -102,26 +103,56 @@ export class UserService {
       email: c.email,
       password: 'default123',
       role,
+      roomNumber,
       name: c.prenom,
       surname: c.nom,
       pseudonym: c.pseudo,
       gender: c.genre,
       birthdate: c.dateNaissance,
       memberType: c.typeMembre,
-      profilePhoto: `https://i.pravatar.cc/150?u=${c.email}`,
-      roomNumber: roomNumber // ✅ Assign room here
+      profilePhoto: `https://i.pravatar.cc/150?u=${c.email}`
     };
-
+  
     const ref = collection(this.firestore, 'users');
     await addDoc(ref, newUser);
+  
+    // ✉️ Send confirmation email via EmailJS
+    emailjs.send('service_c2dotqs', 'template_nhv7wck', {
+      prenom: c.prenom,
+      nom: c.nom,
+      email: c.email
+    }, 'U2hjDBr6kS44aib0b')
+    .then(() => console.log("✅ Email sent"))
+    .catch((error) => console.error("❌ Error sending email:", error));
   }
 
   async updatePassword(newPassword: string): Promise<void> {
-    // Optional — not implemented yet
+    if (!this.loggedInEmail) return;
+  
+    const ref = collection(this.firestore, 'users');
+    const q = query(ref, where('email', '==', this.loggedInEmail));
+    const snapshot = await getDocs(q);
+  
+    if (snapshot.empty) return;
+  
+    const docRef = snapshot.docs[0].ref;
+    await updateDoc(docRef, { password: newPassword });
+  
+    console.log("🔐 Password updated in Firestore");
   }
 
   async updatePrivateInfo(updated: Partial<UserProfile>): Promise<void> {
-    // Optional — not implemented yet
+    if (!this.loggedInEmail) return;
+  
+    const ref = collection(this.firestore, 'users');
+    const q = query(ref, where('email', '==', this.loggedInEmail));
+    const snapshot = await getDocs(q);
+  
+    if (snapshot.empty) return;
+  
+    const docRef = snapshot.docs[0].ref;
+    await updateDoc(docRef, updated);
+    console.log("📝 Private profile info updated");
   }
   async getTakenRooms(): Promise<number[]> {
     const ref = collection(this.firestore, 'users');

@@ -31,9 +31,6 @@ import {
   TemplateRef,
   Version,
   ViewContainerRef,
-  __async,
-  __spreadProps,
-  __spreadValues,
   booleanAttribute,
   createNgModule,
   findLocaleData,
@@ -60,7 +57,12 @@ import {
   ɵɵinject,
   ɵɵinjectAttribute,
   ɵɵstyleProp
-} from "./chunk-VQVBZD3Z.js";
+} from "./chunk-MCVMEQYC.js";
+import {
+  __async,
+  __spreadProps,
+  __spreadValues
+} from "./chunk-5K356HEJ.js";
 
 // node_modules/@angular/common/fesm2022/common.mjs
 var _DOM = null;
@@ -3682,7 +3684,7 @@ function isPlatformBrowser(platformId) {
 function isPlatformServer(platformId) {
   return platformId === PLATFORM_SERVER_ID;
 }
-var VERSION = new Version("19.2.3");
+var VERSION = new Version("19.2.4");
 var ViewportScroller = class _ViewportScroller {
   // De-sugared tree-shakable injection
   // See #23917
@@ -5120,9 +5122,9 @@ export {
 
 @angular/common/fesm2022/common.mjs:
   (**
-   * @license Angular v19.2.3
+   * @license Angular v19.2.4
    * (c) 2010-2025 Google LLC. https://angular.io/
    * License: MIT
    *)
 */
-//# sourceMappingURL=chunk-QYNGX76T.js.map
+//# sourceMappingURL=chunk-XRZXE44F.js.map

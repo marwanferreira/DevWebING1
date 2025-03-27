@@ -1,6 +1,6 @@
 import {
   getDOM
-} from "./chunk-QYNGX76T.js";
+} from "./chunk-XRZXE44F.js";
 import {
   ChangeDetectorRef,
   Directive,
@@ -21,8 +21,6 @@ import {
   SkipSelf,
   Subject,
   Version,
-  __spreadProps,
-  __spreadValues,
   booleanAttribute,
   computed,
   forkJoin,
@@ -47,7 +45,11 @@ import {
   ɵɵdirectiveInject,
   ɵɵgetInheritedFactory,
   ɵɵlistener
-} from "./chunk-VQVBZD3Z.js";
+} from "./chunk-MCVMEQYC.js";
+import {
+  __spreadProps,
+  __spreadValues
+} from "./chunk-5K356HEJ.js";
 
 // node_modules/@angular/forms/fesm2022/forms.mjs
 var BaseControlValueAccessor = class _BaseControlValueAccessor {
@@ -6712,7 +6714,7 @@ var UntypedFormBuilder = class _UntypedFormBuilder extends FormBuilder {
     }]
   }], null, null);
 })();
-var VERSION = new Version("19.2.3");
+var VERSION = new Version("19.2.4");
 var FormsModule = class _FormsModule {
   /**
    * @description
@@ -6865,7 +6867,7 @@ export {
 
 @angular/forms/fesm2022/forms.mjs:
   (**
-   * @license Angular v19.2.3
+   * @license Angular v19.2.4
    * (c) 2010-2025 Google LLC. https://angular.io/
    * License: MIT
    *)
