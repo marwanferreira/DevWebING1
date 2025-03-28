@@ -25,7 +25,7 @@ export interface UserProfile {
   birthdate: string;
   memberType: string;
   profilePhoto: string;
-  roomNumber: number | null; // ✅ NEW FIELD
+  roomNumber: number | null;
 }
 
 @Injectable({
@@ -112,11 +112,11 @@ export class UserService {
       memberType: c.typeMembre,
       profilePhoto: `https://i.pravatar.cc/150?u=${c.email}`
     };
-  
+
     const ref = collection(this.firestore, 'users');
     await addDoc(ref, newUser);
-  
-    // ✉️ Send confirmation email via EmailJS
+
+    // Send confirmation email
     emailjs.send('service_c2dotqs', 'template_nhv7wck', {
       prenom: c.prenom,
       nom: c.nom,
@@ -128,36 +128,37 @@ export class UserService {
 
   async updatePassword(newPassword: string): Promise<void> {
     if (!this.loggedInEmail) return;
-  
+
     const ref = collection(this.firestore, 'users');
     const q = query(ref, where('email', '==', this.loggedInEmail));
     const snapshot = await getDocs(q);
-  
+
     if (snapshot.empty) return;
-  
+
     const docRef = snapshot.docs[0].ref;
     await updateDoc(docRef, { password: newPassword });
-  
+
     console.log("🔐 Password updated in Firestore");
   }
 
   async updatePrivateInfo(updated: Partial<UserProfile>): Promise<void> {
     if (!this.loggedInEmail) return;
-  
+
     const ref = collection(this.firestore, 'users');
     const q = query(ref, where('email', '==', this.loggedInEmail));
     const snapshot = await getDocs(q);
-  
+
     if (snapshot.empty) return;
-  
+
     const docRef = snapshot.docs[0].ref;
     await updateDoc(docRef, updated);
     console.log("📝 Private profile info updated");
   }
+
   async getTakenRooms(): Promise<number[]> {
     const ref = collection(this.firestore, 'users');
     const snapshot = await getDocs(ref);
-  
+
     const rooms: number[] = [];
     snapshot.docs.forEach(doc => {
       const user = doc.data() as UserProfile;
@@ -165,13 +166,13 @@ export class UserService {
         rooms.push(user.roomNumber);
       }
     });
-  
+
     return rooms;
   }
+
   async getAvailableRooms(): Promise<number[]> {
     const taken = await this.getTakenRooms();
     const allRooms = Array.from({ length: 10 }, (_, i) => i + 1);
     return allRooms.filter(room => !taken.includes(room));
   }
-  
 }
