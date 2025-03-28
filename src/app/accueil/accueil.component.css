@@ -4,6 +4,6 @@
   background-position: center;
   height: 100vh;
   padding: 0 20px;
-  background-color: green /* Légère superposition sombre pour améliorer la lisibilité */
+  background-color: green; /* Légère superposition sombre pour améliorer la lisibilité */
   color: blueviolet; /* Police rouge */
 }
