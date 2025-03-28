@@ -13,15 +13,14 @@ export const routes: Routes = [
 
   {
     path: 'visualisation',
-    canActivate: [roleGuard(['simple', 'complexe', 'admin'])],
     children: [
       {
-        path: 'profil',
+        path: 'gestion-profil',
         loadComponent: () =>
           import('./modules/visualisation/gestion-profil/gestion-profil.component').then(m => m.GestionProfilComponent)
       },
       {
-        path: 'points',
+        path: 'points-niveaux',
         loadComponent: () =>
           import('./modules/visualisation/points-niveaux/points-niveaux.component').then(m => m.PointsNiveauxComponent)
       },
@@ -32,11 +31,18 @@ export const routes: Routes = [
       },
       {
         path: 'gestion-objets',
-        canActivate: [roleGuard(['complexe', 'admin'])],
         loadComponent: () =>
           import('./modules/visualisation/gestion-objets/gestion-objets.component').then(m => m.GestionObjetsComponent)
       }
-    ]
+    ],
+    canActivate: [roleGuard(['simple', 'complexe', 'admin'])]
+  },
+
+  {
+    path: 'gestion',
+    loadComponent: () =>
+      import('./modules/gestion/gestion.component').then(m => m.GestionComponent),
+    canActivate: [roleGuard(['complexe', 'admin'])]
   },
 
   {
@@ -54,8 +60,7 @@ export const routes: Routes = [
   },
 
   {
-    path: 'checkin',
-    loadComponent: () =>
-      import('./modules/login/login.component').then(m => m.LoginComponent)
+    path: 'login',
+    loadComponent: () => import('./modules/login/login.component').then(m => m.LoginComponent)
   }
 ];
