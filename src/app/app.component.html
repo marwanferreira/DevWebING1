@@ -1,37 +1,12 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
-  <a class="navbar-brand" routerLink="/">
-    <img src="https://cdn-icons-png.flaticon.com/512/235/235861.png" width="30" height="30" class="d-inline-block align-top" alt="Logo">
+<nav class="navbar navbar-dark bg-dark navbar-expand-lg px-3">
+  <a class="navbar-brand" href="#">
+    <img src="https://img.icons8.com/color/48/marker--v1.png" width="30" height="30" class="d-inline-block align-top" alt="logo" />
     Residia
   </a>
-  <ul class="navbar-nav ms-auto">
-    <li class="nav-item">
-      <a class="nav-link" routerLink="/information" routerLinkActive="active">Information</a>
-    </li>
-    <li class="nav-item" *ngIf="!userService.is('visiteur')">
-      <a class="nav-link" routerLink="/visualisation" routerLinkActive="active">Visualisation</a>
-    </li>
-    <li class="nav-item" *ngIf="userService.is('complexe')">
-      <a class="nav-link" routerLink="/gestion" routerLinkActive="active">Gestion</a>
-    </li>
-    <li class="nav-item" *ngIf="userService.is('admin')">
-      <a class="nav-link" routerLink="/administration" routerLinkActive="active">Administration</a>
-    </li>
-    <li class="nav-item" *ngIf="userService.is('visiteur')">
-      <a class="nav-link" routerLink="/login" routerLinkActive="active">Se connecter</a>
-    </li>
-    <li class="nav-item" *ngIf="!userService.is('visiteur')">
-      <a class="nav-link text-warning" (click)="userService.logout(); router.navigate(['/'])">Déconnexion</a>
-    </li>
-
-  <a class="navbar-brand" href="#">
-    <img src="https://cdn-icons-png.flaticon.com/512/235/235861.png" width="30" height="30" class="d-inline-block align-top" alt="Logo">
-    Hôtel Intelligent
-  </a>
-  <ul class="navbar-nav ms-auto">
-    <li class="nav-item"><a class="nav-link" routerLink="/">Accueil</a></li>
-    <li class="nav-item"><a class="nav-link" routerLink="/checkin">Check-In</a></li>
-    <li class="nav-item"><a class="nav-link" routerLink="/admin">Admin</a></li>
-  </ul>
+  <div class="ms-auto d-flex align-items-center">
+    <a routerLink="/information" class="nav-link text-white me-3" style="cursor: pointer;">Information</a>
+    <a routerLink="/login" class="nav-link text-white" style="cursor: pointer;">Se connecter</a>
+  </div>
 </nav>
 
 <router-outlet></router-outlet>
