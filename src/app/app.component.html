@@ -4,32 +4,32 @@
   <div class="collapse navbar-collapse justify-content-end">
     <ul class="navbar-nav">
 
-      <!-- Always visible -->
+      <!-- Link to Information (Accueil) -->
       <li class="nav-item">
-        <a routerLink="/" routerLinkActive="active" class="nav-link">Informations</a>
+        <a class="nav-link" routerLink="/information" routerLinkActive="active">Informations</a>
       </li>
 
-      <!-- Only visible to VISITEUR -->
+      <!-- Se connecter (only for visitor) -->
       <li class="nav-item" *ngIf="userService.is('visiteur')">
-        <a routerLink="/checkin" routerLinkActive="active" class="nav-link">Se connecter</a>
+        <a class="nav-link" routerLink="/login" routerLinkActive="active">Se connecter</a>
       </li>
 
-      <!-- 🔽 DROPDOWN: Visible for simple, complexe, admin -->
-      <li class="nav-item dropdown" *ngIf="userService.is('simple') || userService.is('complexe') || userService.is('admin')">
-        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Visualisation</a>
-        <ul class="dropdown-menu dropdown-menu-dark">
-          <li><a routerLink="/visualisation/profil" class="dropdown-item">Gestion du profil</a></li>
-          <li><a routerLink="/visualisation/points" class="dropdown-item">Points & Niveaux</a></li>
-          <li><a routerLink="/visualisation/consultation" class="dropdown-item">Consultation des objets</a></li>
-          <li *ngIf="userService.is('complexe') || userService.is('admin')">
-            <a routerLink="/visualisation/gestion-objets" class="dropdown-item">Gestion des objets</a>
-          </li>
-        </ul>
-      </li>
-
-      <!-- Admin dashboard shortcut -->
+      <!-- Admin only -->
       <li class="nav-item" *ngIf="userService.is('admin')">
-        <a routerLink="/administration/candidatures" routerLinkActive="active" class="nav-link">Administration</a>
+        <a class="nav-link" routerLink="/administration/candidatures" routerLinkActive="active">Administration</a>
+      </li>
+
+      <!-- Visualisation dropdown for allowed users -->
+      <li class="nav-item dropdown" *ngIf="userService.is('simple') || userService.is('complexe') || userService.is('admin')">
+        <a class="nav-link dropdown-toggle" href="#" id="visualisationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Visualisation
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="visualisationDropdown">
+          <li><a class="dropdown-item" routerLink="/visualisation/gestion-profil" routerLinkActive="active">Gestion du profil</a></li>
+          <li><a class="dropdown-item" routerLink="/visualisation/points-niveaux" routerLinkActive="active">Points & Niveaux</a></li>
+          <li><a class="dropdown-item" routerLink="/visualisation/recherche" routerLinkActive="active">Recherche d’objets</a></li>
+          <li><a class="dropdown-item" routerLink="/visualisation/gestion-objets" routerLinkActive="active">Gestion des objets</a></li>
+        </ul>
       </li>
 
       <!-- Logout -->
@@ -40,5 +40,4 @@
   </div>
 </nav>
 
-<!-- Content outlet -->
 <router-outlet></router-outlet>
