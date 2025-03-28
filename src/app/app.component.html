@@ -22,6 +22,15 @@
     <li class="nav-item" *ngIf="!userService.is('visiteur')">
       <a class="nav-link text-warning" (click)="userService.logout(); router.navigate(['/'])">Déconnexion</a>
     </li>
+
+  <a class="navbar-brand" href="#">
+    <img src="https://cdn-icons-png.flaticon.com/512/235/235861.png" width="30" height="30" class="d-inline-block align-top" alt="Logo">
+    Hôtel Intelligent
+  </a>
+  <ul class="navbar-nav ms-auto">
+    <li class="nav-item"><a class="nav-link" routerLink="/">Accueil</a></li>
+    <li class="nav-item"><a class="nav-link" routerLink="/checkin">Check-In</a></li>
+    <li class="nav-item"><a class="nav-link" routerLink="/admin">Admin</a></li>
   </ul>
 </nav>
 
