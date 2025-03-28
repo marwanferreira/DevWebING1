@@ -13,23 +13,37 @@ export const routes: Routes = [
 
   {
     path: 'visualisation',
-    loadComponent: () =>
-      import('./modules/visualisation/visualisation.component').then(m => m.VisualisationComponent),
-    canActivate: [roleGuard(['simple', 'complexe', 'admin'])]
-  },
-
-  {
-    path: 'gestion',
-    loadComponent: () =>
-      import('./modules/gestion/gestion.component').then(m => m.GestionComponent),
-    canActivate: [roleGuard(['complexe', 'admin'])]
+    canActivate: [roleGuard(['simple', 'complexe', 'admin'])],
+    children: [
+      {
+        path: 'profil',
+        loadComponent: () =>
+          import('./modules/visualisation/gestion-profil/gestion-profil.component').then(m => m.GestionProfilComponent)
+      },
+      {
+        path: 'points',
+        loadComponent: () =>
+          import('./modules/visualisation/points-niveaux/points-niveaux.component').then(m => m.PointsNiveauxComponent)
+      },
+      {
+        path: 'consultation',
+        loadComponent: () =>
+          import('./modules/visualisation/consultation/consultation.component').then(m => m.ConsultationComponent)
+      },
+      {
+        path: 'gestion-objets',
+        canActivate: [roleGuard(['complexe', 'admin'])],
+        loadComponent: () =>
+          import('./modules/visualisation/gestion-objets/gestion-objets.component').then(m => m.GestionObjetsComponent)
+      }
+    ]
   },
 
   {
     path: 'administration',
     loadComponent: () =>
       import('./modules/administration/administration.component').then(m => m.AdministrationComponent),
-    canActivate: [roleGuard(['admin'])], // ✅ Fixed comma here
+    canActivate: [roleGuard(['admin'])],
     children: [
       {
         path: 'candidatures',
@@ -40,9 +54,8 @@ export const routes: Routes = [
   },
 
   {
-    path: 'login',
-    loadComponent: () => import('./modules/login/login.component').then(m => m.LoginComponent)
+    path: 'checkin',
+    loadComponent: () =>
+      import('./modules/login/login.component').then(m => m.LoginComponent)
   }
-  
-
 ];

@@ -1,0 +1,39 @@
+<div class="container mt-4" *ngIf="profile">
+    <h2>🎮 Système de Points & Niveaux</h2>
+  
+    <div class="card p-3 mb-4">
+      <p><strong>Niveau actuel :</strong> {{ level | titlecase }}</p>
+      <p><strong>Points :</strong> {{ points }} / {{ nextLevelPoints === infinity ? '∞' : nextLevelPoints }}</p>
+  
+      <div class="progress mb-3">
+        <div
+          class="progress-bar"
+          role="progressbar"
+          [style.width]="(points / nextLevelPoints) * 100 + '%'"
+          [attr.aria-valuenow]="points"
+          aria-valuemin="0"
+          [attr.aria-valuemax]="nextLevelPoints"
+        >
+          {{ points }} pts
+        </div>
+      </div>
+  
+      <button class="btn btn-primary" (click)="upgradeLevel()" [disabled]="nextLevelPoints === infinity">
+        🔼 Améliorer mon niveau
+      </button>
+    </div>
+  
+    <div class="card p-3">
+      <h4 class="mb-3">🔓 Déverrouillage des niveaux</h4>
+      <ul class="list-group">
+        <li class="list-group-item" *ngFor="let lvl of ['débutant', 'intermédiaire', 'avancé', 'expert']">
+          <div class="d-flex justify-content-between">
+            <strong>{{ lvl | titlecase }}</strong>
+            <span>{{ getLevelStatus(castLevel(lvl)) }}</span>
+        </div>
+            <small class="text-muted">{{ levelDescriptions[castLevel(lvl)] }}</small>
+        </li>
+      </ul>
+    </div>
+  </div>
+  

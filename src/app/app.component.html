@@ -6,35 +6,39 @@
 
       <!-- Always visible -->
       <li class="nav-item">
-        <a routerLink="/information" routerLinkActive="active" class="nav-link">Information</a>
+        <a routerLink="/" routerLinkActive="active" class="nav-link">Informations</a>
       </li>
 
-      <!-- Only show "Login" if visitor -->
+      <!-- Only visible to VISITEUR -->
       <li class="nav-item" *ngIf="userService.is('visiteur')">
-        <a routerLink="/login" routerLinkActive="active" class="nav-link">Se connecter</a>
+        <a routerLink="/checkin" routerLinkActive="active" class="nav-link">Se connecter</a>
       </li>
 
-      <!-- Show only for Admin -->
+      <!-- 🔽 DROPDOWN: Visible for simple, complexe, admin -->
+      <li class="nav-item dropdown" *ngIf="userService.is('simple') || userService.is('complexe') || userService.is('admin')">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Visualisation</a>
+        <ul class="dropdown-menu dropdown-menu-dark">
+          <li><a routerLink="/visualisation/profil" class="dropdown-item">Gestion du profil</a></li>
+          <li><a routerLink="/visualisation/points" class="dropdown-item">Points & Niveaux</a></li>
+          <li><a routerLink="/visualisation/consultation" class="dropdown-item">Consultation des objets</a></li>
+          <li *ngIf="userService.is('complexe') || userService.is('admin')">
+            <a routerLink="/visualisation/gestion-objets" class="dropdown-item">Gestion des objets</a>
+          </li>
+        </ul>
+      </li>
+
+      <!-- Admin dashboard shortcut -->
       <li class="nav-item" *ngIf="userService.is('admin')">
-        <a routerLink="/administration" routerLinkActive="active" class="nav-link">Administration</a>
+        <a routerLink="/administration/candidatures" routerLinkActive="active" class="nav-link">Administration</a>
       </li>
 
-      <!-- For simple and complex users -->
-      <li class="nav-item" *ngIf="userService.is('simple') || userService.is('complexe') || userService.is('admin')">
-        <a routerLink="/visualisation" routerLinkActive="active" class="nav-link">Visualisation</a>
-      </li>
-
-      <!-- For complex and admin -->
-      <li class="nav-item" *ngIf="userService.is('complexe') || userService.is('admin')">
-        <a routerLink="/gestion" routerLinkActive="active" class="nav-link">Gestion</a>
-      </li>
-
-      <!-- Logout button -->
+      <!-- Logout -->
       <li class="nav-item" *ngIf="userService.getUser() !== 'visiteur'">
-        <button class="btn btn-outline-light ms-2" (click)="logout()">Logout</button>
+        <button class="btn btn-outline-light ms-2" (click)="logout()">Se déconnecter</button>
       </li>
     </ul>
   </div>
 </nav>
 
+<!-- Content outlet -->
 <router-outlet></router-outlet>
