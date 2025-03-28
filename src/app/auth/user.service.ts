@@ -15,22 +15,29 @@ import { Candidature } from '../candidature/candidature.model';
 export type UserType = 'visiteur' | 'simple' | 'complexe' | 'admin';
 
 export interface UserProfile {
+  uid?: string;
   email: string;
   password: string;
-  role: UserType;
-  name: string;
-  surname: string;
   pseudonym: string;
   gender: string;
   birthdate: string;
   memberType: string;
   profilePhoto: string;
-  roomNumber: number | null;
+
+  // 🔐 Private section
+  name?: string;
+  surname?: string;
+
+  // 🔓 System properties
+  role: UserType;
+  roomNumber: number;
+
+  // 💯 Gamification
+  points: number;
+  level: 'débutant' | 'intermédiaire' | 'avancé' | 'expert';
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class UserService {
   private currentUser: UserType = 'visiteur';
   private loggedInEmail: string | null = null;
@@ -60,11 +67,9 @@ export class UserService {
     const ref = collection(this.firestore, 'users');
     const q = query(ref, where('email', '==', email.trim().toLowerCase()));
     const snapshot = await getDocs(q);
-
     if (snapshot.empty) return false;
 
     const user = snapshot.docs[0].data() as UserProfile;
-
     if (user.password !== password) return false;
 
     this.setUser(user.role);
@@ -78,7 +83,6 @@ export class UserService {
     const ref = collection(this.firestore, 'users');
     const q = query(ref, where('email', '==', this.loggedInEmail));
     const snapshot = await getDocs(q);
-
     return snapshot.empty ? null : (snapshot.docs[0].data() as UserProfile);
   }
 
@@ -110,13 +114,15 @@ export class UserService {
       gender: c.genre,
       birthdate: c.dateNaissance,
       memberType: c.typeMembre,
-      profilePhoto: `https://i.pravatar.cc/150?u=${c.email}`
+      profilePhoto: `https://i.pravatar.cc/150?u=${c.email}`,
+      points: 0,
+      level: 'débutant'
     };
 
     const ref = collection(this.firestore, 'users');
     await addDoc(ref, newUser);
 
-    // Send confirmation email
+    // ✅ Email confirmation
     emailjs.send('service_c2dotqs', 'template_nhv7wck', {
       prenom: c.prenom,
       nom: c.nom,
@@ -132,7 +138,6 @@ export class UserService {
     const ref = collection(this.firestore, 'users');
     const q = query(ref, where('email', '==', this.loggedInEmail));
     const snapshot = await getDocs(q);
-
     if (snapshot.empty) return;
 
     const docRef = snapshot.docs[0].ref;
@@ -147,7 +152,6 @@ export class UserService {
     const ref = collection(this.firestore, 'users');
     const q = query(ref, where('email', '==', this.loggedInEmail));
     const snapshot = await getDocs(q);
-
     if (snapshot.empty) return;
 
     const docRef = snapshot.docs[0].ref;
