@@ -11,10 +11,10 @@ import { UserService } from './auth/user.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor(public userService: UserService, public router: Router) {}
+  constructor(public userService: UserService, private router: Router) {}
 
-  changerType(event: Event) {
-    const selectElement = event.target as HTMLSelectElement;
-    this.userService.setUser(selectElement.value as any);
+  logout() {
+    this.userService.logout();
+    this.router.navigateByUrl('/');
   }
 }

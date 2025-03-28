@@ -1,11 +1,39 @@
-<nav class="navbar navbar-dark bg-dark navbar-expand-lg px-3">
-  <a class="navbar-brand" href="#">
-    <img src="https://img.icons8.com/color/48/marker--v1.png" width="30" height="30" class="d-inline-block align-top" alt="logo" />
-    Residia
-  </a>
-  <div class="ms-auto d-flex align-items-center">
-    <a routerLink="/information" class="nav-link text-white me-3" style="cursor: pointer;">Information</a>
-    <a routerLink="/login" class="nav-link text-white" style="cursor: pointer;">Se connecter</a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
+  <a class="navbar-brand me-auto" routerLink="/">Résidia</a>
+
+  <div class="collapse navbar-collapse justify-content-end">
+    <ul class="navbar-nav">
+
+      <!-- Always visible -->
+      <li class="nav-item">
+        <a routerLink="/information" routerLinkActive="active" class="nav-link">Information</a>
+      </li>
+
+      <!-- Only show "Login" if visitor -->
+      <li class="nav-item" *ngIf="userService.is('visiteur')">
+        <a routerLink="/login" routerLinkActive="active" class="nav-link">Se connecter</a>
+      </li>
+
+      <!-- Show only for Admin -->
+      <li class="nav-item" *ngIf="userService.is('admin')">
+        <a routerLink="/administration" routerLinkActive="active" class="nav-link">Administration</a>
+      </li>
+
+      <!-- For simple and complex users -->
+      <li class="nav-item" *ngIf="userService.is('simple') || userService.is('complexe') || userService.is('admin')">
+        <a routerLink="/visualisation" routerLinkActive="active" class="nav-link">Visualisation</a>
+      </li>
+
+      <!-- For complex and admin -->
+      <li class="nav-item" *ngIf="userService.is('complexe') || userService.is('admin')">
+        <a routerLink="/gestion" routerLinkActive="active" class="nav-link">Gestion</a>
+      </li>
+
+      <!-- Logout button -->
+      <li class="nav-item" *ngIf="userService.getUser() !== 'visiteur'">
+        <button class="btn btn-outline-light ms-2" (click)="logout()">Logout</button>
+      </li>
+    </ul>
   </div>
 </nav>
 
