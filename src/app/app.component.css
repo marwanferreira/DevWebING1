@@ -1,10 +1,18 @@
+/* Style pour les liens de la barre de navigation */
 .navbar-nav .nav-link {
-    color: #ffffff !important;
-    margin-left: 10px;
-  }
-  
-  .navbar-brand {
-    font-weight: bold;
-    font-size: 1.5rem;
-  }
-  
+  color: #ffffff !important;
+  margin-left: 10px;
+}
+
+/* Style pour le texte "Résidia" dans la barre de navigation */
+.navbar-brand {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+/* Assurez-vous que le logo est bien dimensionné et espacé */
+.navbar-brand img {
+  width: 100px;  /* Ajuste la taille du logo selon ta préférence */
+  height: 100px; /* Ajuste la hauteur du logo */
+  margin-right: 100px; /* Espacement entre le logo et le texte */
+}
