@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-consultation',
   standalone: true,
   imports: [CommonModule],
-  template: `<h2>🔍 Consultation des objets et services</h2>`
+  templateUrl: './consultation.component.html',
+  styleUrls: ['./consultation.component.css'] // Optional: if you want to style it later
 })
 export class ConsultationComponent {}

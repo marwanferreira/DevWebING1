@@ -1,1 +1,18 @@
-<p>gestion-profil works!</p>
+<div *ngIf="profile" class="container mt-4">
+    <h2>👤 Gestion de Profil</h2>
+  
+    <div class="card p-3">
+      <img [src]="profile.photoURL || defaultPhotoURL" class="rounded mb-2" width="100" />
+      <input type="file" (change)="onPhotoSelected($event)" class="form-control mb-2" />
+      <button class="btn btn-primary" (click)="uploadPhoto()">📤 Upload</button>
+  
+      <p><strong>Pseudo:</strong> {{ profile.pseudonym }}</p>
+      <p><strong>Email:</strong> {{ profile.email }}</p>
+      <p><strong>Role:</strong> {{ profile.role }}</p>
+    </div>
+  </div>
+  
+  <div *ngIf="!profile" class="container mt-4">
+    <p>Chargement du profil...</p>
+  </div>
+  

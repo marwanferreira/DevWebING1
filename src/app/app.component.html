@@ -1,38 +1,39 @@
+<!-- ✅ Navigation principale -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
   <a class="navbar-brand d-flex align-items-center" routerLink="/">
-    <!-- Logo ajouté à gauche de "Résidia" -->
     <img src="https://i.postimg.cc/BZzRSrgB/Chat-GPT-Image-Mar-28-2025-08-51-04-PM.png" alt="Logo Résidia" width="40" height="40" class="me-2">
-    
   </a>
 
-  <div class="collapse navbar-collapse justify-content-end">
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
     <ul class="navbar-nav">
 
-      <!-- Link to Information (Accueil) -->
+      <!-- Accueil -->
       <li class="nav-item">
         <a class="nav-link" routerLink="/information" routerLinkActive="active">Informations</a>
       </li>
 
-      <!-- Se connecter (only for visitor) -->
+      <!-- Connexion visiteur -->
       <li class="nav-item" *ngIf="userService.is('visiteur')">
         <a class="nav-link" routerLink="/login" routerLinkActive="active">Se connecter</a>
       </li>
 
-      <!-- Admin only -->
+      <!-- Admin -->
       <li class="nav-item" *ngIf="userService.is('admin')">
         <a class="nav-link" routerLink="/administration/candidatures" routerLinkActive="active">Administration</a>
       </li>
 
-      <!-- Visualisation dropdown for allowed users -->
+      <!-- Visualisation -->
       <li class="nav-item dropdown" *ngIf="userService.is('simple') || userService.is('complexe') || userService.is('admin')">
-        <a class="nav-link dropdown-toggle" href="#" id="visualisationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          Visualisation
-        </a>
-        <ul class="dropdown-menu" aria-labelledby="visualisationDropdown">
-          <li><a class="dropdown-item" routerLink="/visualisation/gestion-profil" routerLinkActive="active">Gestion du profil</a></li>
-          <li><a class="dropdown-item" routerLink="/visualisation/points-niveaux" routerLinkActive="active">Points & Niveaux</a></li>
-          <li><a class="dropdown-item" routerLink="/visualisation/recherche" routerLinkActive="active">Recherche d’objets</a></li>
-          <li><a class="dropdown-item" routerLink="/visualisation/gestion-objets" routerLinkActive="active">Gestion des objets</a></li>
+        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Visualisation</a>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" routerLink="/visualisation/gestion-profil">Gestion du profil</a></li>
+          <li><a class="dropdown-item" routerLink="/visualisation/points-niveaux">Points & Niveaux</a></li>
+          <li><a class="dropdown-item" routerLink="/visualisation/consultation">Recherche d’objets</a></li>
+          <li><a class="dropdown-item" routerLink="/visualisation/gestion-objets">Gestion des objets</a></li>
         </ul>
       </li>
 
@@ -44,4 +45,7 @@
   </div>
 </nav>
 
-<router-outlet></router-outlet>
+<!-- ✅ Contenu de la page -->
+<div class="container mt-4">
+  <router-outlet></router-outlet>
+</div>

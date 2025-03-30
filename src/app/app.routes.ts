@@ -17,7 +17,8 @@ export const routes: Routes = [
       {
         path: 'gestion-profil',
         loadComponent: () =>
-          import('./modules/visualisation/gestion-profil/gestion-profil.component').then(m => m.GestionProfilComponent)
+          import('./modules/visualisation/gestion-profil/gestion-profil.component')
+            .then(m => m.GestionProfilComponent)
       },
       {
         path: 'points-niveaux',

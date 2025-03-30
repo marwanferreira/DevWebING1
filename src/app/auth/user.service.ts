@@ -22,7 +22,8 @@ export interface UserProfile {
   gender: string;
   birthdate: string;
   memberType: string;
-  profilePhoto: string;
+  profilePhoto?: string;
+  photoURL?: string;
 
   // 🔐 Private section
   name?: string;
@@ -83,7 +84,10 @@ export class UserService {
     const ref = collection(this.firestore, 'users');
     const q = query(ref, where('email', '==', this.loggedInEmail));
     const snapshot = await getDocs(q);
-    return snapshot.empty ? null : (snapshot.docs[0].data() as UserProfile);
+    if (snapshot.empty) return null;
+
+    const docSnap = snapshot.docs[0];
+    return { uid: docSnap.id, ...docSnap.data() } as UserProfile;
   }
 
   async getPublicProfiles(): Promise<Partial<UserProfile>[]> {
@@ -97,7 +101,7 @@ export class UserService {
         gender: u.gender,
         birthdate: u.birthdate,
         memberType: u.memberType,
-        profilePhoto: u.profilePhoto
+        photoURL: u.photoURL || 'https://www.w3schools.com/howto/img_avatar.png'
       };
     });
   }
@@ -114,7 +118,8 @@ export class UserService {
       gender: c.genre,
       birthdate: c.dateNaissance,
       memberType: c.typeMembre,
-      profilePhoto: `https://i.pravatar.cc/150?u=${c.email}`,
+      profilePhoto: `https://i.pravatar.cc/150?u=${c.email}`, // optional fallback
+      photoURL: 'https://www.w3schools.com/howto/img_avatar.png',
       points: 0,
       level: 'débutant'
     };

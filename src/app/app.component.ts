@@ -1,20 +1,22 @@
 import { Component } from '@angular/core';
-import { Router, RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { UserService } from './auth/user.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor(public userService: UserService, private router: Router) {}
+  constructor(public userService: UserService) {
+    console.log('✅ AppComponent OK');
+  }
 
-  logout() {
+  logout(): void {
     this.userService.logout();
-    this.router.navigateByUrl('/');
+    location.reload(); // hard reset pour tout nettoyer
   }
 }
