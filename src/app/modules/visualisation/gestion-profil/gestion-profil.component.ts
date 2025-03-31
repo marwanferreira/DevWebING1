@@ -23,7 +23,10 @@ export class GestionProfilComponent {
     'assets/avatars/10491828.jpg',
     'assets/avatars/10496273.jpg',
     'assets/avatars/10496278.jpg',
-    'assets/avatars/10496272.jpg'
+    'assets/avatars/10496272.jpg',
+    'assets/avatars/10491836.jpg',
+    'assets/avatars/10491849.jpg',
+    'assets/avatars/10491845.jpg'
   ];
 
   constructor(private userService: UserService) {
