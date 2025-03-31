@@ -1,5 +1,31 @@
+# ✅ Node + Angular stuff
 node_modules/
-.angular/cache/
-
+dist/
 .angular/
+.angular/cache/
 .DS_Store
+
+# ✅ Mac system files
+*.DS_Store
+
+# ✅ IDE settings (optional)
+.vscode/
+.idea/
+
+# ✅ Build output folders
+out-tsc/
+
+# ✅ Large local SDKs or generated assets
+google-cloud-sdk/
+*.tar.gz
+*.zip
+
+# ✅ Sensitive or heavy data
+*.env
+*.json
+firebase-debug.log
+
+# ✅ Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
