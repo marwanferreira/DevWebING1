@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "residia-c3eff",
+    "prod": "aerobic-forge-455419-n7"
+  },
+  "targets": {},
+  "etags": {}
+}

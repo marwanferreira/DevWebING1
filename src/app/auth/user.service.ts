@@ -7,9 +7,9 @@ import {
   addDoc,
   query,
   where,
-  doc,
   updateDoc
 } from '@angular/fire/firestore';
+import { QueryDocumentSnapshot } from 'firebase/firestore'; // ✅ FIXED: correct source
 import { Candidature } from '../candidature/candidature.model';
 
 export type UserType = 'visiteur' | 'simple' | 'complexe' | 'admin';
@@ -60,6 +60,7 @@ export class UserService {
 
   logout(): void {
     localStorage.removeItem('userType');
+    localStorage.removeItem('loggedInEmail');
     this.currentUser = 'visiteur';
     this.loggedInEmail = null;
   }
@@ -75,16 +76,27 @@ export class UserService {
 
     this.setUser(user.role);
     this.loggedInEmail = user.email;
+    localStorage.setItem('loggedInEmail', user.email);
+
     return true;
   }
 
   async getCurrentProfile(): Promise<UserProfile | null> {
-    if (!this.loggedInEmail) return null;
+    if (!this.loggedInEmail) {
+      this.loggedInEmail = localStorage.getItem('loggedInEmail');
+      if (!this.loggedInEmail) {
+        console.warn("⚠️ No loggedInEmail found");
+        return null;
+      }
+    }
 
     const ref = collection(this.firestore, 'users');
     const q = query(ref, where('email', '==', this.loggedInEmail));
     const snapshot = await getDocs(q);
-    if (snapshot.empty) return null;
+    if (snapshot.empty) {
+      console.warn("⚠️ No profile found for:", this.loggedInEmail);
+      return null;
+    }
 
     const docSnap = snapshot.docs[0];
     return { uid: docSnap.id, ...docSnap.data() } as UserProfile;
@@ -94,7 +106,7 @@ export class UserService {
     const ref = collection(this.firestore, 'users');
     const snapshot = await getDocs(ref);
 
-    return snapshot.docs.map(doc => {
+    return snapshot.docs.map((doc: QueryDocumentSnapshot) => {
       const u = doc.data() as UserProfile;
       return {
         pseudonym: u.pseudonym,
@@ -118,7 +130,7 @@ export class UserService {
       gender: c.genre,
       birthdate: c.dateNaissance,
       memberType: c.typeMembre,
-      profilePhoto: `https://i.pravatar.cc/150?u=${c.email}`, // optional fallback
+      profilePhoto: `https://i.pravatar.cc/150?u=${c.email}`,
       photoURL: 'https://www.w3schools.com/howto/img_avatar.png',
       points: 0,
       level: 'débutant'
@@ -127,7 +139,6 @@ export class UserService {
     const ref = collection(this.firestore, 'users');
     await addDoc(ref, newUser);
 
-    // ✅ Email confirmation
     emailjs.send('service_c2dotqs', 'template_nhv7wck', {
       prenom: c.prenom,
       nom: c.nom,
@@ -169,7 +180,7 @@ export class UserService {
     const snapshot = await getDocs(ref);
 
     const rooms: number[] = [];
-    snapshot.docs.forEach(doc => {
+    snapshot.docs.forEach((doc: QueryDocumentSnapshot) => {
       const user = doc.data() as UserProfile;
       if (user.roomNumber !== null && user.roomNumber !== undefined) {
         rooms.push(user.roomNumber);

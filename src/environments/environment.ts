@@ -1,12 +1,12 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: "AIzaSyCeWHqXqDVMRCt9AWETW85wyT-ANuih3es",
-    authDomain: "residia-c3eff.firebaseapp.com",
-    projectId: "residia-c3eff",
-    storageBucket: "residia-c3eff.appspot.com",
-    messagingSenderId: "276155603758",
-    appId: "1:276155603758:web:b22f2d8d34b328e02138bf",
-    measurementId: "G-0KKDGPH9M5"
+    apiKey: "AIzaSyCB6Lwt15QJ3NTFHgohSnxlCzY-S8YEYrE",
+    authDomain: "aerobic-forge-455419-n7.firebaseapp.com",
+    projectId: "aerobic-forge-455419-n7",
+    storageBucket: "aerobic-forge-455419-n7.appspot.com",
+    messagingSenderId: "138843224080",
+    appId: "1:138843224080:web:a9a38ac9f17cd751237295",
+    measurementId: "G-KXXQ0XCFYZ"
   }
 };
