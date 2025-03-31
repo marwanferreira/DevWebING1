@@ -6,7 +6,6 @@ import { routes } from './app/app.routes';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { provideStorage, getStorage } from '@angular/fire/storage';
-
 import { environment } from './environments/environment';
 
 bootstrapApplication(AppComponent, {
@@ -16,4 +15,4 @@ bootstrapApplication(AppComponent, {
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage())
   ]
-}).catch(err => console.error(err));
+});

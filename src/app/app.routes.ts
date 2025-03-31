@@ -59,12 +59,7 @@ export const routes: Routes = [
       }
     ]
   },
-  {
-    path: 'test-profil',
-    loadComponent: () =>
-      import('./modules/visualisation/gestion-profil/gestion-profil.component')
-        .then(m => m.GestionProfilComponent)
-  },
+
   {
     path: 'login',
     loadComponent: () => import('./modules/login/login.component').then(m => m.LoginComponent)

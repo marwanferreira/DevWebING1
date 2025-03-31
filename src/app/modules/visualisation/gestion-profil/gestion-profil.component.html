@@ -1,39 +1,18 @@
 <div *ngIf="profile" class="container mt-4">
-  <h2>👤 Gestion de Profil</h2>
-
-  <div class="card p-3">
-    <!-- 🖼️ Display current profile photo -->
-    <img [src]="profile.photoURL || defaultPhotoURL" class="rounded mb-3" width="100" />
-
-    <!-- 👇 Avatar selection grid -->
-    <div class="mt-2">
-      <p><strong>Choose an avatar:</strong></p>
-      <div class="d-flex flex-wrap gap-2">
-        <img
-          *ngFor="let avatar of avatarOptions"
-          [src]="avatar"
-          width="80"
-          height="80"
-          class="rounded border"
-          [ngClass]="{ 'border-primary border-3': profile.photoURL === avatar }"
-          style="cursor: pointer"
-          (click)="selectAvatar(avatar)"
-        />
-      </div>
+    <h2>👤 Gestion de Profil</h2>
+  
+    <div class="card p-3">
+      <img [src]="profile.photoURL || defaultPhotoURL" class="rounded mb-2" width="100" />
+      <input type="file" (change)="onPhotoSelected($event)" class="form-control mb-2" />
+      <button class="btn btn-primary" (click)="uploadPhoto()">📤 Upload</button>
+  
+      <p><strong>Pseudo:</strong> {{ profile.pseudonym }}</p>
+      <p><strong>Email:</strong> {{ profile.email }}</p>
+      <p><strong>Role:</strong> {{ profile.role }}</p>
     </div>
-
-    <hr class="my-3" />
-
-    <!-- ℹ️ Profile info -->
-    <p><strong>Pseudo:</strong> {{ profile.pseudonym }}</p>
-    <p><strong>Email:</strong> {{ profile.email }}</p>
-    <p><strong>Role:</strong> {{ profile.role }}</p>
-    <p><strong>Genre:</strong> {{ profile.gender }}</p>
-    <p><strong>Date de naissance:</strong> {{ profile.birthdate }}</p>
-    <p><strong>Type de membre:</strong> {{ profile.memberType }}</p>
   </div>
-</div>
-
-<div *ngIf="!profile" class="container mt-4">
-  <p>Chargement du profil...</p>
-</div>
+  
+  <div *ngIf="!profile" class="container mt-4">
+    <p>Chargement du profil...</p>
+  </div>
+  
