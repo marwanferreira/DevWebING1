@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Storage, ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
 import { UserService, UserProfile } from '../../../auth/user.service';
 
 @Component({
@@ -15,13 +13,20 @@ import { UserService, UserProfile } from '../../../auth/user.service';
 export class GestionProfilComponent {
   profile: UserProfile | null = null;
   defaultPhotoURL = 'https://www.w3schools.com/howto/img_avatar.png';
-  selectedPhotoFile: File | null = null;
 
-  constructor(
-    private userService: UserService,
-    private firestore: AngularFirestore,
-    private storage: Storage
-  ) {
+  avatarOptions: string[] = [
+    this.defaultPhotoURL,
+    'assets/avatars/10491829.jpg',
+    'assets/avatars/10491837.jpg',
+    'assets/avatars/10491848.jpg',
+    'assets/avatars/10491839.jpg',
+    'assets/avatars/10491828.jpg',
+    'assets/avatars/10496273.jpg',
+    'assets/avatars/10496278.jpg',
+    'assets/avatars/10496272.jpg'
+  ];
+
+  constructor(private userService: UserService) {
     console.log("🔥 GestionProfilComponent loaded");
   }
 
@@ -39,32 +44,15 @@ export class GestionProfilComponent {
     }
   }
 
-  onPhotoSelected(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      this.selectedPhotoFile = file;
-      console.log("📸 Selected file:", file.name);
+  async selectAvatar(url: string): Promise<void> {
+    if (!this.profile?.uid) return;
+
+    try {
+      await this.userService.updatePrivateInfo({ photoURL: url });
+      this.profile.photoURL = url;
+      alert('✅ Avatar updated!');
+    } catch (error) {
+      console.error('❌ Failed to update avatar:', error);
     }
-  }
-
-  uploadPhoto(): void {
-    if (!this.selectedPhotoFile || !this.profile?.uid) {
-      console.warn("⚠️ Missing file or profile uid");
-      return;
-    }
-
-    const filePath = `profile-pictures/${this.profile.uid}`;
-    const fileRef = ref(this.storage, filePath);
-
-    uploadBytes(fileRef, this.selectedPhotoFile).then(() => {
-      getDownloadURL(fileRef).then(async (url) => {
-        console.log("✅ Got download URL:", url);
-        await this.firestore.collection('users').doc(this.profile!.uid!).update({ photoURL: url });
-        this.profile!.photoURL = url;
-        alert("✅ Photo mise à jour !");
-      });
-    }).catch(err => {
-      console.error("❌ Upload error:", err);
-    });
   }
 }
