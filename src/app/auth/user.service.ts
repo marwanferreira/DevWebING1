@@ -7,7 +7,6 @@ import {
   addDoc,
   query,
   where,
-  doc,
   updateDoc
 } from '@angular/fire/firestore';
 import { Candidature } from '../candidature/candidature.model';
@@ -101,6 +100,7 @@ export class UserService {
         gender: u.gender,
         birthdate: u.birthdate,
         memberType: u.memberType,
+        roomNumber: u.roomNumber,
         photoURL: u.photoURL || 'https://www.w3schools.com/howto/img_avatar.png'
       };
     });
@@ -117,8 +117,8 @@ export class UserService {
       pseudonym: c.pseudo,
       gender: c.genre,
       birthdate: c.dateNaissance,
-      memberType: c.typeMembre,
-      profilePhoto: `https://i.pravatar.cc/150?u=${c.email}`, // optional fallback
+      memberType: 'Résident', // ✅ Always resident
+      profilePhoto: `https://i.pravatar.cc/150?u=${c.email}`,
       photoURL: 'https://www.w3schools.com/howto/img_avatar.png',
       points: 0,
       level: 'débutant'

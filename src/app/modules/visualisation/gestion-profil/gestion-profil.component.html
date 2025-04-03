@@ -1,47 +1,70 @@
 <div *ngIf="profile" class="container mt-4">
   <h2>👤 Gestion de Profil</h2>
 
-  <div class="card p-3">
-    <!-- 🖼️ Display current profile photo -->
+  <div class="card p-3 mb-4">
+    <!-- 🖼️ Current profile photo -->
     <img [src]="profile.photoURL || defaultPhotoURL" class="rounded mb-3" width="100" />
 
-    <!-- 👇 Avatar selection grid -->
-    <div class="mt-2">
-      <p><strong>Choisissez un avatar :</strong></p>
-      <div class="d-flex flex-wrap gap-2">
-        <img
-          *ngFor="let avatar of avatarOptions"
-          [src]="avatar"
-          width="80"
-          height="80"
-          class="rounded border"
-          [ngClass]="{ 'border-primary border-3': profile.photoURL === avatar }"
-          style="cursor: pointer"
-          (click)="selectAvatar(avatar)"
-        />
-      </div>
+    <!-- 🎯 Avatar selection -->
+    <p><strong>Choisissez un avatar :</strong></p>
+    <div class="d-flex flex-wrap gap-2 mb-3">
+      <img
+        *ngFor="let avatar of avatarOptions"
+        [src]="avatar"
+        width="80"
+        height="80"
+        class="rounded border"
+        [ngClass]="{ 'border-primary border-3': profile.photoURL === avatar }"
+        style="cursor: pointer"
+        (click)="selectAvatar(avatar)"
+      />
     </div>
 
-    <hr class="my-3" />
+    <hr />
 
-    <!-- ℹ️ Profile info -->
+    <!-- ℹ️ Public Profile Info -->
     <p><strong>Pseudo:</strong> {{ profile.pseudonym }}</p>
     <p><strong>Email:</strong> {{ profile.email }}</p>
     <p><strong>Role:</strong> {{ profile.role }}</p>
     <p><strong>Genre:</strong> {{ profile.gender }}</p>
     <p><strong>Date de naissance:</strong> {{ profile.birthdate }}</p>
     <p><strong>Type de membre:</strong> {{ profile.memberType }}</p>
+    <p><strong>Numéro de chambre:</strong> {{ profile.roomNumber }}</p>
 
-    <hr class="my-3" />
+    <hr />
 
-    <!-- 🔐 Change Password -->
-    <div class="mt-3">
-      <h5>🔐 Changer le mot de passe</h5>
-      <div class="mb-2">
-        <label>Nouveau mot de passe</label>
-        <input type="password" class="form-control" [(ngModel)]="newPassword" />
+    <!-- 🔐 Private info form -->
+    <div class="mb-2">
+      <label><strong>Nom:</strong></label>
+      <input [(ngModel)]="profile.name" class="form-control" />
+    </div>
+    <div class="mb-2">
+      <label><strong>Prénom:</strong></label>
+      <input [(ngModel)]="profile.surname" class="form-control" />
+    </div>
+    <button (click)="savePrivateInfo()" class="btn btn-primary btn-sm">💾 Mettre à jour infos</button>
+
+    <hr />
+
+    <!-- 🔑 Password Update -->
+    <div class="mb-2">
+      <label><strong>Nouveau mot de passe:</strong></label>
+      <input [(ngModel)]="newPassword" type="password" class="form-control" />
+    </div>
+    <button (click)="changePassword()" class="btn btn-warning btn-sm">🔐 Changer le mot de passe</button>
+  </div>
+
+  <!-- 👥 Public Profiles -->
+  <div class="card p-3">
+    <h4>👥 Profils des autres membres</h4>
+    <div *ngFor="let p of publicProfiles" class="border rounded p-2 mb-2 d-flex align-items-center">
+      <img [src]="p.photoURL || defaultPhotoURL" width="50" height="50" class="rounded me-3" />
+      <div>
+        <p class="mb-1"><strong>Pseudo:</strong> {{ p.pseudonym }}</p>
+        <p class="mb-1"><strong>Genre:</strong> {{ p.gender }}</p>
+        <p class="mb-1"><strong>Date de naissance:</strong> {{ p.birthdate }}</p>
+        <p class="mb-1"><strong>Type de membre:</strong> {{ p.memberType }}</p>
       </div>
-      <button class="btn btn-primary" (click)="updatePassword()">Mettre à jour le mot de passe</button>
     </div>
   </div>
 </div>

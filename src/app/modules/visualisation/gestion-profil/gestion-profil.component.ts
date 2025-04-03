@@ -12,8 +12,9 @@ import { UserService, UserProfile } from '../../../auth/user.service';
 })
 export class GestionProfilComponent {
   profile: UserProfile | null = null;
-  defaultPhotoURL = 'https://www.w3schools.com/howto/img_avatar.png';
+  publicProfiles: Partial<UserProfile>[] = [];
   newPassword: string = '';
+  defaultPhotoURL = 'https://www.w3schools.com/howto/img_avatar.png';
 
   avatarOptions: string[] = [
     this.defaultPhotoURL,
@@ -38,6 +39,8 @@ export class GestionProfilComponent {
     console.log("⚡ ngOnInit running...");
     try {
       this.profile = await this.userService.getCurrentProfile();
+      this.publicProfiles = await this.userService.getPublicProfiles();
+
       if (!this.profile) {
         console.error("❌ Profile is null!");
       } else {
@@ -60,19 +63,32 @@ export class GestionProfilComponent {
     }
   }
 
-  async updatePassword(): Promise<void> {
-    if (!this.newPassword || this.newPassword.length < 6) {
-      alert('❌ Le mot de passe doit contenir au moins 6 caractères.');
+  async savePrivateInfo(): Promise<void> {
+    if (!this.profile?.uid) return;
+
+    try {
+      await this.userService.updatePrivateInfo({
+        name: this.profile.name,
+        surname: this.profile.surname
+      });
+      alert('✅ Private info updated!');
+    } catch (err) {
+      console.error("❌ Failed to update private info:", err);
+    }
+  }
+
+  async changePassword(): Promise<void> {
+    if (!this.newPassword) {
+      alert("❗ Please enter a new password.");
       return;
     }
 
     try {
       await this.userService.updatePassword(this.newPassword);
-      alert('✅ Mot de passe mis à jour avec succès.');
       this.newPassword = '';
-    } catch (error) {
-      console.error('❌ Error updating password:', error);
-      alert('❌ Une erreur est survenue lors de la mise à jour du mot de passe.');
+      alert("✅ Password updated!");
+    } catch (err) {
+      console.error("❌ Failed to update password:", err);
     }
   }
 }
