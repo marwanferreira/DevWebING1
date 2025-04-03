@@ -31,3 +31,16 @@
 .navbar a:hover {
   text-decoration: underline;
 }
+#colivingText {
+  background-color: #003366 !important;
+  color: white !important;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+}
+
+#colivingText h3,
+#colivingText p,
+#colivingText strong {
+  color: white !important;
+}
