@@ -39,7 +39,7 @@
 
   <hr>
 
-  <h3 class="mt-5 text-center text-success">🌟 Postulez à Residia !</h3>
+  <h3 class="mt-5 text-center text-custom">🌟 Postulez à Residia !</h3>
   <p class="text-center mb-4">Rejoignez notre communauté et participez à la vie de la résidence intelligente.</p>
 
   <form (ngSubmit)="postuler()" #formRef="ngForm" class="card p-4 shadow-sm">
@@ -90,7 +90,9 @@
         [(ngModel)]="form.motivation" required></textarea>
     </div>
 
-    <button type="submit" class="btn btn-success w-100">Envoyer ma candidature</button>
+    <button type="submit" class="btn btn-primary w-100" style="background-color: #003366; border-color: #003366;">
+      Envoyer ma candidature
+    </button>
 
     <div *ngIf="formSubmitted" class="alert alert-success mt-3 text-center">
       ✅ Votre candidature a bien été envoyée ! L’équipe Residia vous contactera bientôt.

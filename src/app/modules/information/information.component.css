@@ -2,3 +2,16 @@
     color: #003366; /* Couleur rouge */
   }
 
+  .btn-primary {
+    background-color: #003366;
+    border-color: #003366;
+  }
+  
+  .btn-primary:hover,
+  .btn-primary:focus {
+    background-color: #002244;
+    border-color: #002244;
+  }
+  .text-custom {
+    color: #003366;
+  }
