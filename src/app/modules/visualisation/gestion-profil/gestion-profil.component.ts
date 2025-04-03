@@ -13,6 +13,7 @@ import { UserService, UserProfile } from '../../../auth/user.service';
 export class GestionProfilComponent {
   profile: UserProfile | null = null;
   defaultPhotoURL = 'https://www.w3schools.com/howto/img_avatar.png';
+  newPassword: string = '';
 
   avatarOptions: string[] = [
     this.defaultPhotoURL,
@@ -56,6 +57,22 @@ export class GestionProfilComponent {
       alert('✅ Avatar updated!');
     } catch (error) {
       console.error('❌ Failed to update avatar:', error);
+    }
+  }
+
+  async updatePassword(): Promise<void> {
+    if (!this.newPassword || this.newPassword.length < 6) {
+      alert('❌ Le mot de passe doit contenir au moins 6 caractères.');
+      return;
+    }
+
+    try {
+      await this.userService.updatePassword(this.newPassword);
+      alert('✅ Mot de passe mis à jour avec succès.');
+      this.newPassword = '';
+    } catch (error) {
+      console.error('❌ Error updating password:', error);
+      alert('❌ Une erreur est survenue lors de la mise à jour du mot de passe.');
     }
   }
 }
