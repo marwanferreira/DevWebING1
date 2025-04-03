@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { UserType, UserService } from '../../auth/user.service';
+import { UserType, UserProfile, UserService } from '../../auth/user.service';
 import { ApplicationService } from '../../auth/application.service';
 import { Candidature } from '../../candidature/candidature.model';
+import { collection, deleteDoc, doc, getDocs, getFirestore, query, where, updateDoc } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-gestion-candidatures',
@@ -14,6 +16,8 @@ import { Candidature } from '../../candidature/candidature.model';
 })
 export class GestionCandidaturesComponent implements OnInit {
   candidatures: Candidature[] = [];
+  residents: UserProfile[] = [];
+
   selectedRole: { [email: string]: UserType } = {};
   selectedRoom: { [email: string]: number | null } = {};
 
@@ -21,12 +25,22 @@ export class GestionCandidaturesComponent implements OnInit {
 
   constructor(
     private applicationService: ApplicationService,
-    private userService: UserService
+    private userService: UserService,
+    private firestore: Firestore
   ) {}
 
   async ngOnInit(): Promise<void> {
     this.candidatures = await this.applicationService.getCandidatures();
     this.takenRooms = await this.userService.getTakenRooms();
+    await this.loadResidents();
+  }
+
+  async loadResidents(): Promise<void> {
+    const usersRef = collection(this.firestore, 'users');
+    const snapshot = await getDocs(usersRef);
+    this.residents = snapshot.docs
+      .map(doc => ({ uid: doc.id, ...doc.data() } as UserProfile))
+      .filter(u => u.role !== 'visiteur');
   }
 
   getAvailableRooms(): number[] {
@@ -64,6 +78,31 @@ export class GestionCandidaturesComponent implements OnInit {
   async reject(c: Candidature): Promise<void> {
     await this.applicationService.deleteCandidature(c.id!);
     alert(`❌ Candidature de ${c.nom} rejetée.`);
+    await this.ngOnInit();
+  }
+
+  async updateRole(user: UserProfile): Promise<void> {
+    if (!user.uid) return;
+    const userRef = doc(this.firestore, 'users', user.uid);
+    await updateDoc(userRef, { role: user.role });
+    alert(`🔄 Rôle mis à jour pour ${user.pseudonym}`);
+  }
+
+  async updateRoom(user: UserProfile): Promise<void> {
+    if (!user.uid) return;
+    const userRef = doc(this.firestore, 'users', user.uid);
+    await updateDoc(userRef, { roomNumber: user.roomNumber });
+    alert(`🏠 Chambre mise à jour pour ${user.pseudonym}`);
+  }
+
+  async deleteUser(user: UserProfile): Promise<void> {
+    if (!user.uid) return;
+    const confirmDelete = confirm(`Êtes-vous sûr de vouloir supprimer ${user.pseudonym} ?`);
+    if (!confirmDelete) return;
+
+    const userRef = doc(this.firestore, 'users', user.uid);
+    await deleteDoc(userRef);
+    alert(`🗑️ ${user.pseudonym} supprimé.`);
     await this.ngOnInit();
   }
 }
