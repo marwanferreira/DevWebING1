@@ -1,18 +1,33 @@
 .hero-section {
-    position: relative;
-    height: 80vh;  /* Ajuster la hauteur de l'image en fond pour s'assurer qu'il y a de la place */
-  }
-  
-  .card {
-    padding: 20px;  /* Ajoute un padding pour éviter les coupures */
-  }
-  
-  .card-body {
-    max-height: 500px;  /* Limite la hauteur mais s'assure que tout le texte est visible */
-    overflow-y: auto;  /* Ajoute un scroll si nécessaire pour éviter que le texte soit coupé */
-  }
-  
-  .container {
-    padding-top: 30px;  /* Ajoute de l'espace au-dessus de la section */
-  }
-  
+  position: relative;
+  height: 80vh;
+}
+
+.card {
+  padding: 20px;
+  border-radius: 1rem;
+  background-color: #fdfaf6 !important;
+  color: #003366 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.container {
+  padding-top: 30px;
+}
+
+.navbar {
+  background-color: #003366 !important;
+}
+
+.navbar a, .navbar-brand {
+  color: #fdfaf6 !important;
+}
+
+.navbar a:hover {
+  text-decoration: underline;
+}
