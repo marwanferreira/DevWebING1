@@ -4,3 +4,4 @@ node_modules/
 .angular/
 .DS_Store
 serviceAccountKey.json
+serviceAccountKey.json
