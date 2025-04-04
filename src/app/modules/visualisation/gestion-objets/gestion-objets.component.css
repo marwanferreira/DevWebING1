@@ -1,24 +1,29 @@
-.search-header {
+:host ::ng-deep .search-header {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 20px;
+  font-size: 1.2em;
 }
 
-mat-form-field {
+:host ::ng-deep mat-form-field {
   flex: 1;
+  font-size: 1.1em;
 }
 
-button {
+:host ::ng-deep button {
   margin-left: auto;
+  font-size: 1.1em;
 }
 
-.no-results {
+:host ::ng-deep .no-results {
   background-color: #fff3cd;
   padding: 10px;
   text-align: center;
+  font-size: 1.1em;
 }
 
-.device-card {
+:host ::ng-deep .device-card {
   margin-top: 10px;
+  font-size: 1.1em;
 }

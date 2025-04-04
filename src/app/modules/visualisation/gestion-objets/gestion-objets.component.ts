@@ -1,16 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { FormsModule } from '@angular/forms'; // Import FormsModule for ngModel
-import { UserService } from '../../../auth/user.service'; // Ensure the path is correct
+import { FormsModule } from '@angular/forms';
+import { Firestore, collection, getDocs, query } from '@angular/fire/firestore';
+import { UserService } from '../../../auth/user.service';
 
 interface Device {
   name: string;
   room: string;
+  status: string;
+  type: string;
+  roomNumber: number;
 }
 
 @Component({
@@ -23,37 +27,32 @@ interface Device {
     MatSelectModule,
     MatCardModule,
     MatButtonModule,
-    FormsModule // Add FormsModule to imports
+    FormsModule
   ],
   templateUrl: './gestion-objets.component.html'
 })
-export class GestionObjetsComponent {
-  devices: Device[] = []; // Typage ajouté
+export class GestionObjetsComponent implements OnInit {
+  devices: Device[] = [];
   filteredDevices: Device[] = [];
-  rooms = ['Chambre', 'Salon', 'Cuisine']; // Exemple de pièces
+  searchQuery: string = '';
+  userProfile: any;
 
-  searchQuery: string = ''; // Property for search text
-  selectedRoom: string = ''; // Property for selected room
+  constructor(private userService: UserService, private firestore: Firestore) {}
 
-  constructor(private userService: UserService) {}
+  async ngOnInit() {
+    this.userProfile = await this.userService.getCurrentProfile();
+    const ref = collection(this.firestore, 'connected-objects');
+    const snapshot = await getDocs(ref);
+    this.devices = snapshot.docs.map(doc => doc.data() as Device);
+    this.filteredDevices = [...this.devices];
+  }
 
   onSearch(event: any) {
-    this.searchQuery = event.target.value.toLowerCase();
-    this.filteredDevices = this.devices.filter(device => device.name.toLowerCase().includes(this.searchQuery));
+    this.searchQuery = event.target.value; // Allow natural typing of uppercase letters
+    this.filteredDevices = this.devices.filter(device => device.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
   }
 
-  onRoomSelect(event: any) {
-    this.selectedRoom = event.value;
-    this.filteredDevices = this.devices.filter(device => device.room === this.selectedRoom);
-  }
-
-  toggleDevice(device: Device) {
-    // Logic to toggle device state
-  }
-
-  resetFilters() {
-    this.searchQuery = ''; // Reset search text
-    this.selectedRoom = ''; // Reset room selection
-    this.filteredDevices = [...this.devices]; // Show all devices
+  isAuthorized(device: Device): string {
+    return device.roomNumber === this.userProfile.roomNumber ? 'Autorisé' : 'Non autorisé';
   }
 }

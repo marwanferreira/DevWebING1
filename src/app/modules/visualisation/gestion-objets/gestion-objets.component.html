@@ -1,16 +1,9 @@
 <div class="search-header">
   <h2><i class="bi bi-tools"></i> Gestion des objets connectés</h2>
-  <mat-form-field>
+  <mat-form-field appearance="fill">
     <mat-label>Rechercher un objet</mat-label>
     <input matInput [(ngModel)]="searchQuery" (keyup)="onSearch($event)" placeholder="Recherche par mot-clé...">
   </mat-form-field>
-  <mat-form-field>
-    <mat-label>Sélectionner une pièce</mat-label>
-    <mat-select [(ngModel)]="selectedRoom" (selectionChange)="onRoomSelect($event)">
-      <mat-option *ngFor="let room of rooms" [value]="room">{{ room }}</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <button mat-button (click)="resetFilters()">Réinitialiser</button>
 </div>
 <div *ngIf="filteredDevices.length === 0" class="no-results">
   <p>Aucun objet ne correspond à votre recherche.</p>
@@ -19,7 +12,7 @@
   <mat-card>
     <mat-card-title>{{ device.name }}</mat-card-title>
     <mat-card-content>
-      <button mat-button (click)="toggleDevice(device)">Toggle</button>
+      <p>Access: {{ isAuthorized(device) }}</p>
     </mat-card-content>
   </mat-card>
 </div>
