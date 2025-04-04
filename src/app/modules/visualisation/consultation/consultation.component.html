@@ -1,1 +1,60 @@
-<p>consultation works!</p>
+<div class="container mt-4">
+    <h3 class="mb-4">
+      🔍 Recherche d'objets connectés
+    </h3>
+  
+    <!-- Filters Row -->
+    <div class="row g-2 mb-3 align-items-end">
+      <div class="col-md-4">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Recherche par mot-clé..."
+          [(ngModel)]="searchText"
+          (input)="filterObjects()"
+        />
+      </div>
+  
+      <div class="col-md-3">
+        <select class="form-select" [(ngModel)]="selectedType" (change)="filterObjects()">
+          <option value="">Tous les types</option>
+          <option *ngFor="let type of objectTypes" [value]="type">{{ type }}</option>
+        </select>
+      </div>
+  
+      <div class="col-md-3">
+        <select class="form-select" [(ngModel)]="selectedLocation" (change)="filterObjects()">
+          <option value="">Toutes les localisations</option>
+          <option *ngFor="let loc of locations" [value]="loc">{{ loc }}</option>
+        </select>
+      </div>
+  
+      <div class="col-md-2 text-end">
+        <button class="btn btn-outline-secondary w-100" (click)="resetFilters()">♻️ Réinitialiser</button>
+      </div>
+    </div>
+  
+    <!-- Results -->
+    <div *ngIf="filteredObjects.length > 0; else noResult">
+      <div *ngFor="let obj of filteredObjects" class="card mb-3 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">{{ obj.name }}</h5>
+          <p class="card-text">{{ obj.description || 'Aucune description.' }}</p>
+          <ul class="list-unstyled mb-0">
+            <li><strong>Type :</strong> {{ obj.type }}</li>
+            <li><strong>Localisation :</strong> {{ obj.location }}</li>
+            <li><strong>Connectivité :</strong> {{ obj.connectivity }}</li>
+            <li><strong>Statut :</strong> {{ obj.status }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Empty State -->
+    <ng-template #noResult>
+      <div class="alert alert-warning text-center">
+        Aucun objet ne correspond à votre recherche.
+      </div>
+    </ng-template>
+  </div>
+  
