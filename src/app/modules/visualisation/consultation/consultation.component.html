@@ -39,7 +39,7 @@
       <div *ngFor="let obj of filteredObjects" class="card mb-3 shadow-sm">
         <div class="card-body">
           <h5 class="card-title">{{ obj.name }}</h5>
-          <p class="card-text">{{ obj.description || 'Aucune description.' }}</p>
+          <p class="card-text" *ngIf="obj.description">{{ obj.description }}</p>
           <ul class="list-unstyled mb-0">
             <li><strong>Type :</strong> {{ obj.type }}</li>
             <li><strong>Localisation :</strong> {{ obj.location }}</li>
