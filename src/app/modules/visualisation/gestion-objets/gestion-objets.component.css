@@ -1,29 +1,202 @@
-:host ::ng-deep .search-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+/* Main container */
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 20px;
-  font-size: 1.2em;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-:host ::ng-deep mat-form-field {
+/* Header section */
+.header-section {
+  margin-bottom: 30px;
+}
+
+.main-title {
+  font-size: 28px;
+  color: #003366;
+  margin-bottom: 20px;
+}
+
+.search-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.search-input {
   flex: 1;
-  font-size: 1.1em;
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
 }
 
-:host ::ng-deep button {
-  margin-left: auto;
-  font-size: 1.1em;
+.reset-button {
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-:host ::ng-deep .no-results {
-  background-color: #fff3cd;
-  padding: 10px;
+.reset-button:hover {
+  background-color: #e0e0e0;
+}
+
+/* No results message */
+.no-results {
   text-align: center;
-  font-size: 1.1em;
+  padding: 30px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin-bottom: 20px;
 }
 
-:host ::ng-deep .device-card {
-  margin-top: 10px;
-  font-size: 1.1em;
+/* Devices grid */
+.devices-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+/* Device card */
+.device-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.device-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.device-header {
+  background-color: #003366;
+  color: white;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.device-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.device-type {
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.device-body {
+  padding: 15px;
+}
+
+/* Device image */
+.device-image-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.device-image {
+  max-width: 100px;
+  max-height: 100px;
+  object-fit: contain;
+}
+
+/* Device info */
+.device-info {
+  margin-bottom: 20px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.info-label {
+  font-weight: 600;
+  color: #555;
+}
+
+.info-value {
+  color: #333;
+}
+
+.authorized {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.state-on {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.state-off {
+  color: #dc3545;
+  font-weight: 600;
+}
+
+/* Device actions */
+.device-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.action-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button-on {
+  background-color: #28a745;
+  color: white;
+}
+
+.button-on:hover {
+  background-color: #218838;
+}
+
+.button-off {
+  background-color: #dc3545;
+  color: white;
+}
+
+.button-off:hover {
+  background-color: #c82333;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .devices-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .search-bar {
+    flex-direction: column;
+  }
 }

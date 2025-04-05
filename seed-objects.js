@@ -62,5 +62,55 @@ const objectsPerRoom = [
       console.log(`✅ Ajouté: ${name}`);
     }
   }
+
+  // Manually add distributeurs
+  const distributeur1 = {
+    name: 'Distributeur Salon 1', // Updated name
+    type: 'distributeur',
+    location: 'Salon 1',
+    roomNumber: 1,
+    connectivity: 'Wi-Fi',
+    status: 'Connecté',
+    lastInteraction: new Date().toISOString()
+  };
+  await objectsRef.add(distributeur1);
+  console.log(`✅ Ajouté: ${distributeur1.name}`);
+
+  const distributeur2 = {
+    name: 'Distributeur Salon 2', // Updated name
+    type: 'distributeur',
+    location: 'Salon 2',
+    roomNumber: 2,
+    connectivity: 'Wi-Fi',
+    status: 'Connecté',
+    lastInteraction: new Date().toISOString()
+  };
+  await objectsRef.add(distributeur2);
+  console.log(`✅ Ajouté: ${distributeur2.name}`);
+
+  const distributeur3 = {
+    name: 'Distributeur Salon 3', // Updated name
+    type: 'distributeur',
+    location: 'Salon 3',
+    roomNumber: 3,
+    connectivity: 'Wi-Fi',
+    status: 'Connecté',
+    lastInteraction: new Date().toISOString()
+  };
+  await objectsRef.add(distributeur3);
+  console.log(`✅ Ajouté: ${distributeur3.name}`);
+
+  const distributeur4 = {
+    name: 'Distributeur Salon 4', // Updated name
+    type: 'distributeur',
+    location: 'Salon 4',
+    roomNumber: 4,
+    connectivity: 'Wi-Fi',
+    status: 'Connecté',
+    lastInteraction: new Date().toISOString()
+  };
+  await objectsRef.add(distributeur4);
+  console.log(`✅ Ajouté: ${distributeur4.name}`);
+
   console.log('🎉 Tous les objets supplémentaires ont été ajoutés !');
 })();

@@ -1,18 +1,99 @@
-<div class="search-header">
-  <h2><i class="bi bi-tools"></i> Gestion des objets connectés</h2>
-  <mat-form-field appearance="fill">
-    <mat-label>Rechercher un objet</mat-label>
-    <input matInput [(ngModel)]="searchQuery" (keyup)="onSearch($event)" placeholder="Recherche par mot-clé...">
-  </mat-form-field>
-</div>
-<div *ngIf="filteredDevices.length === 0" class="no-results">
-  <p>Aucun objet ne correspond à votre recherche.</p>
-</div>
-<div *ngFor="let device of filteredDevices" class="device-card">
-  <mat-card>
-    <mat-card-title>{{ device.name }}</mat-card-title>
-    <mat-card-content>
-      <p>Access: {{ isAuthorized(device) }}</p>
-    </mat-card-content>
-  </mat-card>
+<div class="page-container">
+  <div class="header-section">
+    <h1 class="main-title">Recherche d'objets connectés</h1>
+    <div class="search-bar">
+      <input type="text" [(ngModel)]="searchQuery" (keyup)="onSearch($event)" placeholder="Rechercher par mot-clé..." class="search-input">
+      <button (click)="resetFilters()" class="reset-button">♻️ Réinitialiser</button>
+    </div>
+  </div>
+
+  <div *ngIf="filteredDevices.length === 0" class="no-results">
+    <p>Aucun objet ne correspond à votre recherche.</p>
+  </div>
+
+  <div class="devices-grid">
+    <div *ngFor="let device of filteredDevices" class="device-card">
+      <div class="device-header">
+        <h3 class="device-title">{{ device.name }}</h3>
+        <span class="device-type">{{ device.type }}</span>
+      </div>
+      <div class="device-body">
+        <!-- Add device image -->
+        <div class="device-image-container">
+          <img [src]="getDeviceImage(device.type)" alt="{{ device.type }}" class="device-image">
+        </div>
+        
+        <div class="device-info">
+          <div class="info-row">
+            <span class="info-label">Localisation:</span>
+            <span class="info-value">{{ device.room }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Connectivité:</span>
+            <span class="info-value">{{ device.status }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Access:</span>
+            <span class="info-value" [ngClass]="{'authorized': ['machine à café'].includes(device.type.toLowerCase()) || (userProfile?.role === 'admin' ? true : isAuthorized(device) === 'Autorisé')}">
+              {{ 
+                ['machine à café'].includes(device.type.toLowerCase()) ? 'Autorisé' : 
+                (userProfile?.role === 'admin' ? 'Autorisé' : isAuthorized(device)) 
+              }}
+            </span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">État:</span>
+            <span class="info-value" [ngClass]="{'state-on': device.isOn || device.status === 'Libre', 'state-off': !device.isOn || device.status === 'Occupé'}">
+              {{ 
+                ['chargeur'].includes(device.type.toLowerCase()) ? (device.isOn ? 'Vérouillé' : 'Dévérouillé') :
+                ['store'].includes(device.type.toLowerCase()) ? (device.isOn ? 'Rangé' : 'Rabaissé') :
+                ['machine à café'].includes(device.type.toLowerCase()) ? (device.status === 'Libre' ? 'Libre' : 'Occupé') :
+                (device.isOn ? 'Allumé' : 'Éteint') 
+              }}
+            </span>
+          </div>
+        </div>
+        
+        <div class="device-actions">
+          <!-- Coffee machine buttons -->
+          <div *ngIf="['machine à café'].includes(device.type.toLowerCase())" class="action-buttons">
+            <button *ngIf="device.status === 'Libre' || (device.status === 'Occupé' && (device.occupiedBy === userProfile?.email || userProfile?.role === 'admin'))" 
+                    (click)="toggleCoffeeMachine(device)" 
+                    class="action-button" 
+                    [ngClass]="{'button-on': device.status === 'Libre', 'button-off': device.status === 'Occupé'}">
+              {{ device.status === 'Libre' ? 'Utiliser' : 'Quitter' }}
+            </button>
+          </div>
+          
+          <!-- Other devices buttons -->
+          <div *ngIf="['lampe', 'plaque', 'télévision', 'thermostat', 'frigo', 'micro-ondes'].includes(device.type.toLowerCase()) && isAuthorized(device) === 'Autorisé'" class="action-buttons">
+            <button (click)="toggleLight(device)" class="action-button" [ngClass]="{'button-on': !device.isOn, 'button-off': device.isOn}">
+              {{ device.isOn ? 'Éteindre' : 'Allumer' }}
+            </button>
+          </div>
+          
+          <!-- Distributor buttons -->
+          <div *ngIf="['distributeur'].includes(device.type.toLowerCase()) && userProfile?.role === 'admin'" class="action-buttons">
+            <button (click)="toggleLight(device)" class="action-button" [ngClass]="{'button-on': !device.isOn, 'button-off': device.isOn}">
+              {{ device.isOn ? 'Éteindre' : 'Allumer' }}
+            </button>
+          </div>
+          
+          <!-- Charger buttons -->
+          <div *ngIf="['chargeur'].includes(device.type.toLowerCase()) && isAuthorized(device) === 'Autorisé'" class="action-buttons">
+            <button (click)="toggleLight(device)" class="action-button" [ngClass]="{'button-on': !device.isOn, 'button-off': device.isOn}">
+              {{ device.isOn ? 'Vérouiller' : 'Dévérouiller' }}
+            </button>
+          </div>
+          
+          <!-- Store buttons -->
+          <div *ngIf="['store'].includes(device.type.toLowerCase()) && isAuthorized(device) === 'Autorisé'" class="action-buttons">
+            <button (click)="toggleLight(device)" class="action-button" [ngClass]="{'button-on': !device.isOn, 'button-off': device.isOn}">
+              {{ device.isOn ? 'Rabaisser' : 'Ranger' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
