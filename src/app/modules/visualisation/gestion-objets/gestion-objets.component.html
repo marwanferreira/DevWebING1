@@ -18,11 +18,10 @@
         <span class="device-type">{{ device.type }}</span>
       </div>
       <div class="device-body">
-        <!-- Add device image -->
         <div class="device-image-container">
-          <img [src]="getDeviceImage(device.type)" alt="{{ device.type }}" class="device-image">
+          <img [src]="getDeviceImage(device.type)" alt="{{ device.type }}" class="device-image" />
         </div>
-        
+
         <div class="device-info">
           <div class="info-row">
             <span class="info-label">Localisation:</span>
@@ -33,62 +32,56 @@
             <span class="info-value">{{ device.status }}</span>
           </div>
           <div class="info-row">
-            <span class="info-label">Access:</span>
-            <span class="info-value" [ngClass]="{'authorized': ['machine à café'].includes(device.type.toLowerCase()) || (userProfile?.role === 'admin' ? true : isAuthorized(device) === 'Autorisé')}">
-              {{ 
-                ['machine à café'].includes(device.type.toLowerCase()) ? 'Autorisé' : 
-                (userProfile?.role === 'admin' ? 'Autorisé' : isAuthorized(device)) 
-              }}
+            <span class="info-label">Accès:</span>
+            <span class="info-value" [ngClass]="{ 'authorized': canUserControlObject(device) }">
+              {{ canUserControlObject(device) ? 'Autorisé' : 'Non autorisé' }}
             </span>
           </div>
           <div class="info-row">
             <span class="info-label">État:</span>
             <span class="info-value" [ngClass]="{'state-on': device.isOn || device.status === 'Libre', 'state-off': !device.isOn || device.status === 'Occupé'}">
-              {{ 
+              {{
                 ['chargeur'].includes(device.type.toLowerCase()) ? (device.isOn ? 'Vérouillé' : 'Dévérouillé') :
                 ['store'].includes(device.type.toLowerCase()) ? (device.isOn ? 'Rangé' : 'Rabaissé') :
                 ['machine à café'].includes(device.type.toLowerCase()) ? (device.status === 'Libre' ? 'Libre' : 'Occupé') :
-                (device.isOn ? 'Allumé' : 'Éteint') 
+                (device.isOn ? 'Allumé' : 'Éteint')
               }}
             </span>
           </div>
         </div>
-        
+
         <div class="device-actions">
-          <!-- Coffee machine buttons -->
-          <div *ngIf="['machine à café'].includes(device.type.toLowerCase())" class="action-buttons">
-            <button *ngIf="device.status === 'Libre' || (device.status === 'Occupé' && (device.occupiedBy === userProfile?.email || userProfile?.role === 'admin'))" 
-                    (click)="toggleCoffeeMachine(device)" 
-                    class="action-button" 
-                    [ngClass]="{'button-on': device.status === 'Libre', 'button-off': device.status === 'Occupé'}">
+          <!-- Coffee machine -->
+          <div *ngIf="device.type.toLowerCase() === 'machine à café' && canUserControlObject(device)" class="action-buttons">
+            <button (click)="toggleCoffeeMachine(device)" class="action-button" [ngClass]="{ 'button-on': device.status === 'Libre', 'button-off': device.status === 'Occupé' }">
               {{ device.status === 'Libre' ? 'Utiliser' : 'Quitter' }}
             </button>
           </div>
-          
-          <!-- Other devices buttons -->
-          <div *ngIf="['lampe', 'plaque', 'télévision', 'thermostat', 'frigo', 'micro-ondes'].includes(device.type.toLowerCase()) && isAuthorized(device) === 'Autorisé'" class="action-buttons">
-            <button (click)="toggleLight(device)" class="action-button" [ngClass]="{'button-on': !device.isOn, 'button-off': device.isOn}">
+
+          <!-- Toggleable devices -->
+          <div *ngIf="['lampe', 'plaque', 'télévision', 'thermostat', 'frigo', 'micro-ondes', 'machine à laver', 'sèche-linge'].includes(device.type.toLowerCase()) && canUserControlObject(device)" class="action-buttons">
+            <button (click)="toggleLight(device)" class="action-button" [ngClass]="{ 'button-on': !device.isOn, 'button-off': device.isOn }">
               {{ device.isOn ? 'Éteindre' : 'Allumer' }}
             </button>
           </div>
-          
-          <!-- Distributor buttons -->
-          <div *ngIf="['distributeur'].includes(device.type.toLowerCase()) && userProfile?.role === 'admin'" class="action-buttons">
-            <button (click)="toggleLight(device)" class="action-button" [ngClass]="{'button-on': !device.isOn, 'button-off': device.isOn}">
+
+          <!-- Distributor (admin only) -->
+          <div *ngIf="device.type.toLowerCase() === 'distributeur' && canUserControlObject(device)" class="action-buttons">
+            <button (click)="toggleLight(device)" class="action-button" [ngClass]="{ 'button-on': !device.isOn, 'button-off': device.isOn }">
               {{ device.isOn ? 'Éteindre' : 'Allumer' }}
             </button>
           </div>
-          
-          <!-- Charger buttons -->
-          <div *ngIf="['chargeur'].includes(device.type.toLowerCase()) && isAuthorized(device) === 'Autorisé'" class="action-buttons">
-            <button (click)="toggleLight(device)" class="action-button" [ngClass]="{'button-on': !device.isOn, 'button-off': device.isOn}">
+
+          <!-- Charger -->
+          <div *ngIf="device.type.toLowerCase() === 'chargeur' && canUserControlObject(device)" class="action-buttons">
+            <button (click)="toggleLight(device)" class="action-button" [ngClass]="{ 'button-on': !device.isOn, 'button-off': device.isOn }">
               {{ device.isOn ? 'Vérouiller' : 'Dévérouiller' }}
             </button>
           </div>
-          
-          <!-- Store buttons -->
-          <div *ngIf="['store'].includes(device.type.toLowerCase()) && isAuthorized(device) === 'Autorisé'" class="action-buttons">
-            <button (click)="toggleLight(device)" class="action-button" [ngClass]="{'button-on': !device.isOn, 'button-off': device.isOn}">
+
+          <!-- Store -->
+          <div *ngIf="device.type.toLowerCase() === 'store' && canUserControlObject(device)" class="action-buttons">
+            <button (click)="toggleLight(device)" class="action-button" [ngClass]="{ 'button-on': !device.isOn, 'button-off': device.isOn }">
               {{ device.isOn ? 'Rabaisser' : 'Ranger' }}
             </button>
           </div>
