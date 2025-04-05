@@ -1,3 +1,18 @@
 body {
     background-color: #fefcf7 !important; /* Super light cream */
   }
+
+  .logo {
+    width: 110px;
+    height: auto;
+    margin-left: 40px;
+  }
+  nav.navbar {
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+  }
+    
+  
+  
+  
+  
