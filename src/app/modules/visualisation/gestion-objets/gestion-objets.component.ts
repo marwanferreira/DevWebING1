@@ -6,9 +6,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
-import { Firestore, collection, getDocs } from '@angular/fire/firestore';
-import { UserService } from '../../../auth/user.service';
+import { Firestore, collection, getDocs, addDoc } from '@angular/fire/firestore'; // Ensure addDoc is imported
+import { UserService } from '../../../auth/user.service'; // Ensure this import is correct
 import { canUserControlObject } from 'src/app/utils/access-control.util';
+import { query, where } from '@angular/fire/firestore'; // Ensure these imports are added
 
 interface Device {
   name: string;
@@ -18,6 +19,9 @@ interface Device {
   roomNumber: number;
   isOn?: boolean;
   occupiedBy?: string;
+  connectivity?: string; // Add this line
+  location?: string; // Add this line
+  createdAt?: string;
 }
 
 @Component({
@@ -39,15 +43,26 @@ export class GestionObjetsComponent implements OnInit {
   devices: Device[] = [];
   filteredDevices: Device[] = [];
   searchQuery: string = '';
-  userProfile: any;
+  userProfile: any; // Ensure this is declared
+  showAddObjectForm = false;
+  newObject: Device = {
+    name: '',
+    room: '',
+    status: '',
+    type: '',
+    roomNumber: 0,
+    connectivity: '',
+    location: ''
+  };
 
   constructor(
-    private userService: UserService,
+    private userService: UserService, // Ensure UserService is injected
     private firestore: Firestore
   ) {}
 
   async ngOnInit() {
     this.userProfile = await this.userService.getCurrentProfile();
+    console.log('User Profile:', this.userProfile); // Debugging: Check if userProfile is correctly fetched
     const ref = collection(this.firestore, 'connected-objects');
     const snapshot = await getDocs(ref);
     this.devices = snapshot.docs.map(doc => {
@@ -61,6 +76,28 @@ export class GestionObjetsComponent implements OnInit {
       return data;
     });
     this.filteredDevices = [...this.devices];
+
+    // Call the method to search for 'testobj'
+    await this.searchForTestObject();
+  }
+
+  async addObject() {
+    if (this.userProfile?.role !== 'admin') return; // Ensure only 'admin' users can add objects
+
+    try {
+      const objectsRef = collection(this.firestore, 'connected-objects');
+      await addDoc(objectsRef, {
+        ...this.newObject,
+        createdAt: new Date().toISOString()
+      });
+      console.log('Objet ajouté:', this.newObject); // Log the new object
+      alert('Objet ajouté avec succès!');
+      this.newObject = { name: '', room: '', status: '', type: '', roomNumber: 0, connectivity: '', location: '' }; // Reset form
+      this.showAddObjectForm = false;
+    } catch (error) {
+      console.error('Erreur lors de l\'ajout de l\'objet:', error);
+      alert('Erreur lors de l\'ajout de l\'objet.');
+    }
   }
 
   onSearch(event: any) {
@@ -136,5 +173,26 @@ export class GestionObjetsComponent implements OnInit {
 
   canUserControlObject(device: Device): boolean {
     return canUserControlObject(device, this.userProfile);
+  }
+
+  async fetchObjects() {
+    const ref = collection(this.firestore, 'connected-objects');
+    const snapshot = await getDocs(ref);
+    const objects = snapshot.docs.map(doc => doc.data());
+    console.log('Objets dans Firestore:', objects); // Log all objects
+  }
+
+  async searchForTestObject() {
+    const ref = collection(this.firestore, 'connected-objects');
+    const q = query(ref, where('name', '==', 'testobj'));
+    const snapshot = await getDocs(q);
+
+    if (!snapshot.empty) {
+      snapshot.docs.forEach(doc => {
+        console.log(`Objet trouvé: ${doc.id}`, doc.data());
+      });
+    } else {
+      console.log('Objet testobj non trouvé');
+    }
   }
 }
