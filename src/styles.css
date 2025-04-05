@@ -1,16 +1,16 @@
 body {
     background-color: #fefcf7 !important; /* Super light cream */
-  }
+}
 
-  .logo {
-    width: 110px;
-    height: auto;
-    margin-left: 40px;
-  }
-  nav.navbar {
-    padding-top: 0.3rem;
-    padding-bottom: 0.3rem;
-  }
+.logo {
+  height: 100px !important;
+  width: auto !important;
+  margin-left: 40px !important;
+  border: 2px solid #003366 !important; /* bleu foncé */
+}
+
+
+
     
   
   
