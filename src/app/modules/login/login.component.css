@@ -1,0 +1,40 @@
+.login-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 70px;
+  }
+  
+  .login-page h2 {
+    font-size: 36px;
+    color: #003366;
+    margin-bottom: 30px;
+    font-weight: 700;
+  }
+  
+  .login-box {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .btn-login {
+    width: 100%;
+    background-color: #003366;
+    color: white;
+    font-weight: 600;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    transition: 0.3s;
+    margin-top: 15px;
+  }
+  
+  .btn-login:hover {
+    background-color: #001f4d;
+    transform: scale(1.02);
+  }
+  

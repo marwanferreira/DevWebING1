@@ -12,12 +12,12 @@
 
       <!-- Accueil -->
       <li class="nav-item">
-        <a class="nav-link" routerLink="/information" routerLinkActive="active">Informations</a>
+        <a class="nav-link btn-deco" routerLink="/information" routerLinkActive="active">Informations</a>
       </li>
 
       <!-- Connexion visiteur -->
       <li class="nav-item" *ngIf="userService.is('visiteur')">
-        <a class="nav-link" routerLink="/login" routerLinkActive="active">Se connecter</a>
+        <a class="nav-link btn-deco" routerLink="/login" routerLinkActive="active">Se connecter</a>
       </li>
 
       <!-- Admin -->
@@ -27,7 +27,7 @@
 
       <!-- Visualisation -->
       <li class="nav-item dropdown" *ngIf="userService.is('simple') || userService.is('complexe') || userService.is('admin')">
-        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Visualisation</a>
+        <a class="nav-link dropdown-toggle btn-deco" href="#" data-bs-toggle="dropdown">Visualisation</a>
         <ul class="dropdown-menu">
           <li><a class="dropdown-item" routerLink="/visualisation/gestion-profil">Gestion du profil</a></li>
           <li><a class="dropdown-item" routerLink="/visualisation/points-niveaux">Points & Niveaux</a></li>
@@ -38,7 +38,7 @@
 
       <!-- Logout -->
       <li class="nav-item" *ngIf="userService.getUser() !== 'visiteur'">
-        <button class="btn btn-outline-light ms-2" (click)="logout()">Se déconnecter</button>
+        <button class="btn-deco" (click)="logout()">Se déconnecter</button>
       </li>
     </ul>
   </div>

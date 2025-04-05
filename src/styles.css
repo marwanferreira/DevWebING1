@@ -9,6 +9,65 @@ body {
   border: 2px solid #003366 !important; /* bleu foncé */
 }
 
+.navbar-nav .nav-link {
+  color: #ffffff !important;
+  font-weight: 500;
+  margin-right: 20px;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #f0c040 !important;
+  text-decoration: underline;
+}
+
+.btn-deco {
+  border: 1px solid #ffffff;
+  color: #ffffff;
+  padding: 4px 12px;
+  border-radius: 6px;
+  background-color: transparent;
+  transition: all 0.3s ease;
+  margin-right: 10px;
+  cursor: pointer;
+  text-decoration: none !important;
+  font-weight: 400;               /* écriture plus fine */
+  font-size: 14px;
+  align-items: center;
+}
+
+.btn-deco:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* très léger */
+  color: #ffffff;
+}
+
+.dropdown-menu {
+  background-color: #003366;
+  border-radius: 6px;
+  border: none;
+  padding: 8px 0;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.dropdown-item {
+  color: #ffffff;
+  padding: 8px 16px;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #f0c040;
+}
+button.btn-deco {
+  font-weight: 600;
+}
+
+
+
+
 
 
     

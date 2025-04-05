@@ -1,6 +1,8 @@
-<div class="container mt-5" style="max-width: 400px;">
-  <h2 class="mb-4 text-center">Connexion</h2>
-
+<div class="login-page">
+  <h2 class="mb-4 text-center">
+    <i class="bi bi-box-arrow-in-right"></i> Connexion
+  </h2>  
+<div class="login-box">
   <form (ngSubmit)="login()" #loginForm="ngForm">
     <div class="mb-3">
       <label for="email" class="form-label">Email</label>
@@ -30,6 +32,9 @@
       {{ errorMessage }}
     </div>
 
-    <button type="submit" class="btn btn-primary w-100">Se connecter</button>
+    <button type="submit" class="btn-login">Se connecter</button>
   </form>
 </div>
+
+
+
