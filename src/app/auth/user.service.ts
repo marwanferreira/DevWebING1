@@ -69,8 +69,13 @@ export class UserService {
     const snapshot = await getDocs(q);
     if (snapshot.empty) return false;
 
-    const user = snapshot.docs[0].data() as UserProfile;
+    const userDoc = snapshot.docs[0];
+    const user = userDoc.data() as UserProfile;
     if (user.password !== password) return false;
+
+    // Increase user's points by 1 upon login
+    const updatedPoints = (user.points || 0) + 1;
+    await updateDoc(userDoc.ref, { points: updatedPoints });
 
     this.setUser(user.role);
     this.loggedInEmail = user.email;

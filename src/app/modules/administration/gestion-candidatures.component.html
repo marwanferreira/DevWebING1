@@ -56,12 +56,21 @@
   <p><strong>Pseudo:</strong> {{ user.pseudonym }}</p>
   <p><strong>Rôle:</strong> {{ user.role }}</p>
   <p><strong>Chambre:</strong> {{ user.roomNumber }}</p>
+  <p>
+    <strong>Points:</strong>
+    <span *ngIf="profile?.role === 'admin' && user.role !== 'admin'">
+      <input type="number" [(ngModel)]="user.points" (change)="updatePoints(user)" />
+    </span>
+    <span *ngIf="user.role === 'admin' || profile?.role !== 'admin'">
+      {{ user.points }}
+    </span>
+  </p>
 
   <div class="d-flex flex-column flex-md-row gap-3 mt-3">
     <!-- Update role -->
     <div class="flex-fill">
       <label class="form-label">Changer le rôle</label>
-      <select class="form-select" [(ngModel)]="user.role" (change)="updateRole(user)">
+      <select class="form-select" [(ngModel)]="user.role" (change)="updateRole(user)" [disabled]="user.role === 'admin'">
         <option value="simple">Simple</option>
         <option value="complexe">Complexe</option>
         <option value="admin">Admin</option>
@@ -71,7 +80,7 @@
     <!-- Update room -->
     <div class="flex-fill">
       <label class="form-label">Changer la chambre</label>
-      <select class="form-select" [(ngModel)]="user.roomNumber" (change)="updateRoom(user)">
+      <select class="form-select" [(ngModel)]="user.roomNumber" (change)="updateRoom(user)" [disabled]="user.role === 'admin'">
         <option *ngFor="let room of getAvailableRooms()" [value]="room">
           Chambre {{ room }}
         </option>
@@ -80,7 +89,7 @@
 
     <!-- Delete button -->
     <div class="d-flex align-items-end">
-      <button class="btn btn-danger" (click)="deleteUser(user)">🗑️ Supprimer</button>
+      <button class="btn btn-danger" (click)="deleteUser(user)" [disabled]="user.role === 'admin'">🗑️ Supprimer</button>
     </div>
   </div>
 </div>
