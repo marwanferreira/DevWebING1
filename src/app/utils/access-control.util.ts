@@ -24,7 +24,9 @@ export function canUserControlObject(
           'chargeur',
           'plaque',
           'thermostat',
-          'télévision'
+          'télévision',
+          'capteur',
+          'store'
         ];
     
         return allowedTypes.includes(type);
@@ -66,7 +68,7 @@ export function canUserControlObject(
     }
   
     if (room === 'salon coliving') {
-      if (type === 'playstation') return true;
+      if (type === 'console') return true;
       return userRole !== 'simple';
     }
   
