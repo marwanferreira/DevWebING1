@@ -13,6 +13,7 @@ import { canUserControlObject } from 'src/app/utils/access-control.util';
 interface Device {
   name: string;
   room: string;
+  location: string;
   status: string;
   type: string;
   roomNumber: number;
@@ -60,7 +61,11 @@ export class GestionObjetsComponent implements OnInit {
       }
       return data;
     });
-    this.filteredDevices = [...this.devices];
+    
+    this.filteredDevices = this.devices.filter(device =>
+      canUserControlObject(device, this.userProfile)
+    );
+    
   }
 
   onSearch(event: any) {
