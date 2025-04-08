@@ -17,6 +17,7 @@ import { Firestore } from '@angular/fire/firestore';
 export class GestionCandidaturesComponent implements OnInit {
   candidatures: Candidature[] = [];
   residents: UserProfile[] = [];
+  profile: UserProfile | null = null; // Add this line
 
   selectedRole: { [email: string]: UserType } = {};
   selectedRoom: { [email: string]: number | null } = {};
@@ -30,6 +31,7 @@ export class GestionCandidaturesComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
+    this.profile = await this.userService.getCurrentProfile(); // Add this line
     this.candidatures = await this.applicationService.getCandidatures();
     this.takenRooms = await this.userService.getTakenRooms();
     await this.loadResidents();
@@ -93,6 +95,13 @@ export class GestionCandidaturesComponent implements OnInit {
     const userRef = doc(this.firestore, 'users', user.uid);
     await updateDoc(userRef, { roomNumber: user.roomNumber });
     alert(`🏠 Chambre mise à jour pour ${user.pseudonym}`);
+  }
+
+  async updatePoints(user: UserProfile): Promise<void> {
+    if (!user.uid) return;
+    const userRef = doc(this.firestore, 'users', user.uid);
+    await updateDoc(userRef, { points: user.points });
+    alert(`🔄 Points mis à jour pour ${user.pseudonym}`);
   }
 
   async deleteUser(user: UserProfile): Promise<void> {

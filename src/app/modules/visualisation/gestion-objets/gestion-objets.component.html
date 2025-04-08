@@ -4,7 +4,43 @@
     <div class="search-bar">
       <input type="text" [(ngModel)]="searchQuery" (keyup)="onSearch($event)" placeholder="Rechercher par mot-clé..." class="search-input">
       <button (click)="resetFilters()" class="reset-button">♻️ Réinitialiser</button>
+      <button *ngIf="userProfile?.role === 'admin'" (click)="showAddObjectForm = !showAddObjectForm" class="add-object-button">Ajouter un objet</button>
     </div>
+  </div>
+
+  <!-- Add Object Form -->
+  <div *ngIf="showAddObjectForm" class="add-object-form">
+    <form (ngSubmit)="addObject()">
+      <div class="form-group">
+        <label for="name" class="form-label">Nom de l'objet</label>
+        <input type="text" id="name" [(ngModel)]="newObject.name" name="name" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="type" class="form-label">Type</label>
+        <input type="text" id="type" [(ngModel)]="newObject.type" name="type" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="location" class="form-label">Localisation</label>
+        <input type="text" id="location" [(ngModel)]="newObject.location" name="location" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="room" class="form-label">Pièce</label>
+        <input type="text" id="room" [(ngModel)]="newObject.room" name="room" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="roomNumber" class="form-label">Numéro de pièce</label>
+        <input type="number" id="roomNumber" [(ngModel)]="newObject.roomNumber" name="roomNumber" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="connectivity" class="form-label">Connectivité</label>
+        <input type="text" id="connectivity" [(ngModel)]="newObject.connectivity" name="connectivity" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="status" class="form-label">Statut</label>
+        <input type="text" id="status" [(ngModel)]="newObject.status" name="status" class="form-control" required>
+      </div>
+      <button type="submit" class="btn btn-primary mt-3">Ajouter l'objet</button>
+    </form>
   </div>
 
   <div *ngIf="filteredDevices.length === 0" class="no-results">
@@ -14,22 +50,22 @@
   <div class="devices-grid">
     <div *ngFor="let device of filteredDevices" class="device-card">
       <div class="device-header">
-        <h3 class="device-title">{{ device.name }}</h3>
-        <span class="device-type">{{ device.type }}</span>
+        <h3 class="device-title">{{ device.name || 'Nom inconnu' }}</h3>
+        <span class="device-type">{{ device.type || 'Type inconnu' }}</span>
       </div>
       <div class="device-body">
         <div class="device-image-container">
-          <img [src]="getDeviceImage(device.type)" alt="{{ device.type }}" class="device-image" />
+          <img [src]="getDeviceImage(device.type || '')" alt="{{ device.type }}" class="device-image" />
         </div>
 
         <div class="device-info">
           <div class="info-row">
             <span class="info-label">Localisation:</span>
-            <span class="info-value">{{ device.room }}</span>
+            <span class="info-value">{{ device.location || device.room || 'Non spécifiée' }}</span>
           </div>
           <div class="info-row">
             <span class="info-label">Connectivité:</span>
-            <span class="info-value">{{ device.status }}</span>
+            <span class="info-value">{{ device.connectivity || 'Inconnue' }}</span>
           </div>
           <div class="info-row">
             <span class="info-label">Accès:</span>
@@ -39,50 +75,38 @@
           </div>
           <div class="info-row">
             <span class="info-label">État:</span>
-            <span class="info-value" [ngClass]="{'state-on': device.isOn || device.status === 'Libre', 'state-off': !device.isOn || device.status === 'Occupé'}">
+            <span class="info-value"
+              [ngClass]="{
+                'state-on': device.isOn || device.status === 'Libre',
+                'state-off': !device.isOn || device.status === 'Occupé'
+              }">
               {{
-                ['chargeur'].includes(device.type.toLowerCase()) ? (device.isOn ? 'Vérouillé' : 'Dévérouillé') :
-                ['store'].includes(device.type.toLowerCase()) ? (device.isOn ? 'Rangé' : 'Rabaissé') :
-                ['machine à café'].includes(device.type.toLowerCase()) ? (device.status === 'Libre' ? 'Libre' : 'Occupé') :
+                (device.type || '').toLowerCase() === 'chargeur' ? (device.isOn ? 'Vérouillé' : 'Dévérouillé') :
+                (device.type || '').toLowerCase() === 'store' ? (device.isOn ? 'Rangé' : 'Rabaissé') :
+                (device.type || '').toLowerCase() === 'machine à café' ? (device.status === 'Libre' ? 'Libre' : 'Occupé') :
                 (device.isOn ? 'Allumé' : 'Éteint')
               }}
             </span>
           </div>
         </div>
 
-        <div class="device-actions">
-          <!-- Coffee machine -->
-          <div *ngIf="device.type.toLowerCase() === 'machine à café' && canUserControlObject(device)" class="action-buttons">
-            <button (click)="toggleCoffeeMachine(device)" class="action-button" [ngClass]="{ 'button-on': device.status === 'Libre', 'button-off': device.status === 'Occupé' }">
+        <!-- Control buttons -->
+        <div class="device-actions" *ngIf="canUserControlObject(device)">
+          <div *ngIf="(device.type || '').toLowerCase() === 'machine à café'" class="action-buttons">
+            <button (click)="toggleCoffeeMachine(device)" class="action-button"
+              [ngClass]="{ 'button-on': device.status === 'Libre', 'button-off': device.status === 'Occupé' }">
               {{ device.status === 'Libre' ? 'Utiliser' : 'Quitter' }}
             </button>
           </div>
 
-          <!-- Toggleable devices -->
-          <div *ngIf="['lampe', 'plaque', 'télévision', 'thermostat', 'frigo', 'micro-ondes', 'machine à laver', 'sèche-linge'].includes(device.type.toLowerCase()) && canUserControlObject(device)" class="action-buttons">
-            <button (click)="toggleLight(device)" class="action-button" [ngClass]="{ 'button-on': !device.isOn, 'button-off': device.isOn }">
-              {{ device.isOn ? 'Éteindre' : 'Allumer' }}
-            </button>
-          </div>
-
-          <!-- Distributor (admin only) -->
-          <div *ngIf="device.type.toLowerCase() === 'distributeur' && canUserControlObject(device)" class="action-buttons">
-            <button (click)="toggleLight(device)" class="action-button" [ngClass]="{ 'button-on': !device.isOn, 'button-off': device.isOn }">
-              {{ device.isOn ? 'Éteindre' : 'Allumer' }}
-            </button>
-          </div>
-
-          <!-- Charger -->
-          <div *ngIf="device.type.toLowerCase() === 'chargeur' && canUserControlObject(device)" class="action-buttons">
-            <button (click)="toggleLight(device)" class="action-button" [ngClass]="{ 'button-on': !device.isOn, 'button-off': device.isOn }">
-              {{ device.isOn ? 'Vérouiller' : 'Dévérouiller' }}
-            </button>
-          </div>
-
-          <!-- Store -->
-          <div *ngIf="device.type.toLowerCase() === 'store' && canUserControlObject(device)" class="action-buttons">
-            <button (click)="toggleLight(device)" class="action-button" [ngClass]="{ 'button-on': !device.isOn, 'button-off': device.isOn }">
-              {{ device.isOn ? 'Rabaisser' : 'Ranger' }}
+          <div *ngIf="['lampe', 'plaque', 'télévision', 'thermostat', 'frigo', 'micro-ondes','machine à laver', 'sèche-linge', 'distributeur', 'chargeur', 'store','ventilateur', 'caméra', 'capteur', 'lave-vaisselle', 'ordinateur','hotte air', 'portail', 'four', 'console', 'tableau de contrôle'].includes((device.type || '').toLowerCase())" class="action-buttons">
+            <button (click)="toggleLight(device)" class="action-button"
+              [ngClass]="{ 'button-on': !device.isOn, 'button-off': device.isOn }">
+              {{
+                (device.type || '').toLowerCase() === 'chargeur' ? (device.isOn ? 'Vérouiller' : 'Dévérouiller') :
+                (device.type || '').toLowerCase() === 'store' ? (device.isOn ? 'Rabaisser' : 'Ranger') :
+                (device.isOn ? 'Éteindre' : 'Allumer')
+              }}
             </button>
           </div>
         </div>

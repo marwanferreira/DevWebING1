@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserService, UserProfile } from '../../../auth/user.service';
 
@@ -22,9 +22,9 @@ export class PointsNiveauxComponent {
 
   levelThresholds: Record<Level, number> = {
     'débutant': 0,
-    'intermédiaire': 5,
-    'avancé': 10,
-    'expert': 20
+    'intermédiaire': 3,
+    'avancé': 4,
+    'expert': 5
   };
 
   levelDescriptions: Record<Level, string> = {
@@ -34,7 +34,7 @@ export class PointsNiveauxComponent {
     'expert': 'Référent, capable de guider les autres'
   };
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private cdr: ChangeDetectorRef) {}
 
   async ngOnInit() {
     this.profile = await this.userService.getCurrentProfile();
@@ -52,7 +52,7 @@ export class PointsNiveauxComponent {
       : this.levelThresholds[this.levels[index + 1]];
   }
 
-  upgradeLevel() {
+  async upgradeLevel() {
     const currentIndex = this.levels.indexOf(this.level);
     const nextIndex = currentIndex + 1;
     if (nextIndex < this.levels.length) {
@@ -61,7 +61,28 @@ export class PointsNiveauxComponent {
       if (this.points >= requiredPoints) {
         this.level = nextLevel;
         this.nextLevelPoints = this.getNextLevelThreshold(this.level);
-        alert(`✅ Niveau monté : ${nextLevel}`);
+
+        // Update the user's level in the database
+        await this.userService.updatePrivateInfo({ level: nextLevel });
+
+        // Check if the user reaches the "Avancé" level
+        if (nextLevel === 'avancé' && this.profile?.role === 'simple') {
+          this.profile.role = 'complexe';
+          await this.userService.updatePrivateInfo({ role: 'complexe' });
+          alert(`✅ Niveau monté : ${nextLevel}. Statut mis à jour à complexe.`);
+        } 
+        // Check if the user reaches the "Expert" level
+        else if (nextLevel === 'expert' && this.profile && this.profile.role !== 'admin') {
+          this.profile.role = 'admin';
+          await this.userService.updatePrivateInfo({ role: 'admin' });
+          console.log('Role updated to admin'); // Add this line for debugging
+          alert(`✅ Niveau monté : ${nextLevel}. Statut mis à jour à admin.`);
+        } else {
+          alert(`✅ Niveau monté : ${nextLevel}`);
+        }
+
+        // Trigger change detection to update the UI
+        this.cdr.detectChanges();
       } else {
         alert("❌ Pas assez de points.");
       }

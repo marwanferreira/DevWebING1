@@ -69,11 +69,18 @@ export class UserService {
     const snapshot = await getDocs(q);
     if (snapshot.empty) return false;
 
-    const user = snapshot.docs[0].data() as UserProfile;
+    const userDoc = snapshot.docs[0];
+    const user = userDoc.data() as UserProfile;
     if (user.password !== password) return false;
+
+    // Increase user's points by 1 upon login
+    const updatedPoints = (user.points || 0) + 1;
+    await updateDoc(userDoc.ref, { points: updatedPoints });
 
     this.setUser(user.role);
     this.loggedInEmail = user.email;
+    console.log('User logged in:', user); // Vérifiez les informations de l'utilisateur
+    console.log('Stored User Type:', localStorage.getItem('userType')); // Vérifiez le rôle stocké
     return true;
   }
 
@@ -86,7 +93,9 @@ export class UserService {
     if (snapshot.empty) return null;
 
     const docSnap = snapshot.docs[0];
-    return { uid: docSnap.id, ...docSnap.data() } as UserProfile;
+    const profile = { uid: docSnap.id, ...docSnap.data() } as UserProfile;
+    console.log('Current Profile:', profile); // Vérifiez le profil utilisateur
+    return profile;
   }
 
   async getPublicProfiles(): Promise<Partial<UserProfile>[]> {

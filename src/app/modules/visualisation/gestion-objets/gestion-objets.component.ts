@@ -124,7 +124,6 @@ export class GestionObjetsComponent implements OnInit {
       `device-${device.name}`,
       JSON.stringify({ status: device.status, occupiedBy: device.occupiedBy })
     );
-
     console.log(`${device.name} est maintenant ${device.status}`);
   }
 
