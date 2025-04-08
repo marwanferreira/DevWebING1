@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { AccueilComponent } from './accueil/accueil.component';
 import { roleGuard } from './auth/role.guard';
-
+import { StatistiquesComponent } from './modules/statistiques/statistiques.component'
 export const routes: Routes = [
   { path: '', component: AccueilComponent },
 
@@ -63,5 +63,10 @@ export const routes: Routes = [
   {
     path: 'login',
     loadComponent: () => import('./modules/login/login.component').then(m => m.LoginComponent)
+  },
+
+  {
+    path: 'statistiques',
+    component: StatistiquesComponent
   }
 ];

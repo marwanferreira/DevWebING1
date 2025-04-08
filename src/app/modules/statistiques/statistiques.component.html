@@ -1,0 +1,15 @@
+<h2>Rapport statistique</h2>
+
+<p>Total objets : {{ data.length }}</p>
+
+<ul>
+  <li *ngFor="let obj of data">
+    {{ obj.name }} — {{ obj.type }} — {{ obj.location }}
+  </li>
+</ul>
+<h2>Statistiques</h2>
+<ul>
+  <li *ngFor="let item of data">
+    {{ item | json }}
+  </li>
+</ul>

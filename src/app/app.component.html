@@ -24,6 +24,10 @@
       <li class="nav-item" *ngIf="userService.is('admin')">
         <a class="nav-link btn-deco" routerLink="/administration/candidatures" routerLinkActive="active">Administration</a>
       </li>
+      
+      <li class="nav-item">
+         <a class="nav-link btn-deco" routerLink="/statistiques" routerLinkActive="active">📊 Statistiques</a>
+        </li>
 
       <!-- Visualisation -->
       <li class="nav-item dropdown" *ngIf="userService.is('simple') || userService.is('complexe') || userService.is('admin')">
