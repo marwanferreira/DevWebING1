@@ -26,5 +26,9 @@
     {{ obj.name }} ({{ obj.type }}) - usageCount: {{ obj.usageCount }} - lastInteraction: {{ obj.lastInteraction }}
   </li>
 </ul>
+<button *ngIf="userType === 'admin'" (click)="exportData()">
+  Exporter en CSV
+</button>
+
 
 
