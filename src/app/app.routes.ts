@@ -67,6 +67,8 @@ export const routes: Routes = [
 
   {
     path: 'statistiques',
-    component: StatistiquesComponent
+    component: StatistiquesComponent,
+    canActivate: [roleGuard(['admin', 'complexe'])]
   }
+  
 ];

@@ -1,15 +1,22 @@
-<h2>Rapport statistique</h2>
+<h2 class="titre-bleu">Rapport statistique</h2>
 
 <p>Total objets : {{ data.length }}</p>
+<p>Utilisation totale : {{ totalUsage }}</p>
 
+<h3 class="titre-bleu">Objets les plus utilisés :</h3>
+<ul>
+  <li *ngFor="let obj of mostUsed">
+    {{ obj.name }} ({{ obj.type }}) - usageCount: {{ obj.usageCount }}
+  </li>
+</ul>
+
+<h3 class="titre-bleu">Détails complets :</h3>
 <ul>
   <li *ngFor="let obj of data">
-    {{ obj.name }} — {{ obj.type }} — {{ obj.location }}
+    {{ obj.name }} - {{ obj.type }} - {{ obj.location }}  
+    | usageCount: {{ obj.usageCount }}  
+    | lastInteraction: {{ obj.lastInteraction }}  
+    | status: {{ obj.status }}
   </li>
 </ul>
-<h2>Statistiques</h2>
-<ul>
-  <li *ngFor="let item of data">
-    {{ item | json }}
-  </li>
-</ul>
+
