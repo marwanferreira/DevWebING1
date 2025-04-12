@@ -11,8 +11,10 @@ import { query, where } from '@angular/fire/firestore';
 
 import { UserService } from '../../../auth/user.service';
 import { canUserControlObject } from 'src/app/utils/access-control.util';
+import { doc, updateDoc, increment } from '@angular/fire/firestore';
 
 interface Device {
+  id?: string;
   name: string;
   room: string;
   location: string;
@@ -67,7 +69,7 @@ export class GestionObjetsComponent implements OnInit {
     const ref = collection(this.firestore, 'connected-objects');
     const snapshot = await getDocs(ref);
     this.devices = snapshot.docs.map(doc => {
-      const data = doc.data() as Device;
+      const data = { id: doc.id, ...(doc.data() as Device) };
       const saved = localStorage.getItem(`device-${data.name}`);
       if (saved) {
         const parsed = JSON.parse(saved);
@@ -99,14 +101,27 @@ export class GestionObjetsComponent implements OnInit {
     return canUserControlObject(device, this.userProfile);
   }
 
-  toggleLight(device: Device) {
-    device.isOn = !device.isOn;
-    localStorage.setItem(
-      `device-${device.name}`,
-      JSON.stringify({ isOn: device.isOn, occupiedBy: device.occupiedBy })
-    );
-    console.log(`${device.name} is now ${device.isOn ? 'on' : 'off'}`);
-  }
+toggleLight(device: Device) {
+  if (!device.id) return; // sécurité : s’il n’y a pas d’id, on ne fait rien
+
+  device.isOn = !device.isOn;
+
+  const docRef = doc(this.firestore, 'connected-objects', device.id);
+
+  updateDoc(docRef, {
+    isOn: device.isOn,
+    usageCount: increment(1),
+    lastInteraction: new Date().toISOString()
+  });
+
+  localStorage.setItem(
+    `device-${device.name}`,
+    JSON.stringify({ isOn: device.isOn, occupiedBy: device.occupiedBy })
+  );
+
+  console.log(`${device.name} is now ${device.isOn ? 'on' : 'off'}`);
+}
+
 
   toggleCoffeeMachine(device: Device) {
     if (device.status === 'Libre') {
