@@ -4,7 +4,7 @@
     <div class="search-bar">
       <input type="text" [(ngModel)]="searchQuery" (keyup)="onSearch($event)" placeholder="Rechercher par mot-clé..." class="search-input">
       <button (click)="resetFilters()" class="reset-button">♻️ Réinitialiser</button>
-      <button *ngIf="userProfile?.role === 'admin'" (click)="showAddObjectForm = !showAddObjectForm" class="add-object-button">Ajouter un objet</button>
+      <button *ngIf="userProfile?.role === 'admin'" (click)="showAddObjectForm = !showAddObjectForm" class="add-object-button button-blue">Ajouter un objet</button>
     </div>
   </div>
 
@@ -39,7 +39,12 @@
         <label for="status" class="form-label">Statut</label>
         <input type="text" id="status" [(ngModel)]="newObject.status" name="status" class="form-control" required>
       </div>
-      <button type="submit" class="btn btn-primary mt-3">Ajouter l'objet</button>
+      <button type="submit" class="btn btn-primary mt-3">
+        {{ newObject.id ? 'Apporter les modifications' : 'Ajouter l\'objet' }}
+      </button>
+      <button *ngIf="newObject.id && userProfile?.role === 'admin'" type="button" (click)="confirmDelete()" class="btn btn-danger mt-3">
+        Supprimer l'objet
+      </button>
     </form>
   </div>
 
@@ -109,6 +114,7 @@
               }}
             </button>
           </div>
+          <button *ngIf="userProfile?.role === 'admin'" (click)="editObject(device)" class="edit-button button-blue">Modifier</button>
         </div>
       </div>
     </div>

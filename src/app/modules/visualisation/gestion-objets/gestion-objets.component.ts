@@ -12,6 +12,7 @@ import { query, where } from '@angular/fire/firestore';
 import { UserService } from '../../../auth/user.service';
 import { canUserControlObject } from 'src/app/utils/access-control.util';
 import { doc, updateDoc, increment } from '@angular/fire/firestore';
+import { deleteDoc } from '@angular/fire/firestore'; // Import deleteDoc
 
 interface Device {
   id?: string;
@@ -173,44 +174,96 @@ toggleLight(device: Device) {
     return imageMap[lower] || 'assets/images/windows.png';
   }
 
+  scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  editObject(device: Device) {
+    // Pré-remplir le formulaire avec les détails de l'objet à modifier
+    this.newObject = { ...device };
+    this.showAddObjectForm = true; // Utiliser le même formulaire pour la modification
+    this.scrollToTop(); // Scroll to the top of the page
+  }
+
+  resetForm() {
+    this.newObject = {
+      name: '', room: '', status: '', type: '',
+      roomNumber: 0, connectivity: '', location: ''
+    };
+    this.showAddObjectForm = false;
+  }
+
   async addObject() {
     if (this.userProfile?.role !== 'admin') return;
 
     try {
-      const objectsRef = collection(this.firestore, 'connected-objects');
-      await addDoc(objectsRef, {
-        ...this.newObject,
-        createdAt: new Date().toISOString()
-      });
-      alert('Objet ajouté avec succès!');
-      this.newObject = {
-        name: '', room: '', status: '', type: '',
-        roomNumber: 0, connectivity: '', location: ''
-      };
-      this.showAddObjectForm = false;
+      const ref = collection(this.firestore, 'connected-objects');
+      const q = query(ref, where('name', '==', this.newObject.name.trim()));
+      const snapshot = await getDocs(q);
+
+      if (!snapshot.empty && !this.newObject.id) {
+        alert('Un objet avec ce nom existe déjà. Veuillez choisir un autre nom.');
+        return;
+      }
+
+      if (this.newObject.id) {
+        // Mise à jour de l'objet existant
+        const docRef = doc(this.firestore, 'connected-objects', this.newObject.id);
+        await updateDoc(docRef, {
+          name: this.newObject.name.trim(),
+          room: this.newObject.room,
+          location: this.newObject.location,
+          status: this.newObject.status,
+          type: this.newObject.type,
+          roomNumber: this.newObject.roomNumber,
+          connectivity: this.newObject.connectivity
+        });
+        alert('Objet modifié avec succès!');
+
+        // Update local state
+        const index = this.devices.findIndex(device => device.id === this.newObject.id);
+        if (index !== -1) {
+          this.devices[index] = { ...this.newObject };
+          this.filteredDevices = [...this.devices];
+        }
+      } else {
+        // Ajout d'un nouvel objet
+        await addDoc(ref, {
+          ...this.newObject,
+          createdAt: new Date().toISOString()
+        });
+        alert('Objet ajouté avec succès!');
+      }
+
+      this.resetForm(); // Reset form fields after operation
     } catch (error) {
-      console.error('Erreur lors de l\'ajout de l\'objet:', error);
-      alert('Erreur lors de l\'ajout de l\'objet.');
+      console.error('Erreur lors de l\'ajout ou de la modification de l\'objet:', error);
+      alert('Erreur lors de l\'ajout ou de la modification de l\'objet.');
     }
   }
 
-  async fetchObjects() {
-    const ref = collection(this.firestore, 'connected-objects');
-    const snapshot = await getDocs(ref);
-    console.log('Objets dans Firestore:', snapshot.docs.map(d => d.data()));
+  confirmDelete() {
+    if (window.confirm('Êtes-vous sûr de vouloir supprimer cet objet ?')) {
+      this.deleteObject();
+    }
   }
 
-  async searchForTestObject() {
-    const ref = collection(this.firestore, 'connected-objects');
-    const q = query(ref, where('name', '==', 'testobj'));
-    const snapshot = await getDocs(q);
+  async deleteObject() {
+    if (!this.newObject.id || this.userProfile?.role !== 'admin') return;
 
-    if (!snapshot.empty) {
-      snapshot.docs.forEach(doc => {
-        console.log(`Objet trouvé: ${doc.id}`, doc.data());
-      });
-    } else {
-      console.log('Objet testobj non trouvé');
+    try {
+      const docRef = doc(this.firestore, 'connected-objects', this.newObject.id);
+      await deleteDoc(docRef);
+      alert('Objet supprimé avec succès!');
+
+      // Remove the object from local state
+      this.devices = this.devices.filter(device => device.id !== this.newObject.id);
+      this.filteredDevices = [...this.devices];
+
+      this.resetForm(); // Reset form fields after deletion
+    } catch (error) {
+      console.error('Erreur lors de la suppression de l\'objet:', error);
+      alert('Erreur lors de la suppression de l\'objet.');
     }
   }
 }
