@@ -91,7 +91,7 @@ npx angular-cli-ghpages --dir=dist/dev-web-ing1/browser
 
 ---
 
-# Residia – Smart Student Coliving Platform 🏠✨
+# Residia – Smart Student Coliving Platform 🏠
 
 Welcome to **Residia**, an Angular-based platform developed as part of an academic project at CY Tech. It simulates a student coliving residence, with user management, connected devices, and an admin module.
 
@@ -172,7 +172,11 @@ npx angular-cli-ghpages --dir=dist/dev-web-ing1/browser
 ## 🧠 Author
 
 **Marwan Ferreira da Silva**  
+
 **Nassim Marzaguii**
+
 **Basma Jebbour**
+
 **Douae Adlouni**
+
 **Henoc Mbamba**
