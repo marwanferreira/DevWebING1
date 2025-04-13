@@ -1,1 +1,0 @@
-import{a}from"./chunk-FM4QFJ2I.js";import"./chunk-6YAUY6RG.js";import"./chunk-B2ROMJ5P.js";import"./chunk-PI5EMYVM.js";import"./chunk-NNRU5QZJ.js";import"./chunk-6CM4DDM5.js";export{a as GestionCandidaturesComponent};
