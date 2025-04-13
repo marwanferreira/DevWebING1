@@ -22,9 +22,9 @@ export class PointsNiveauxComponent {
 
   levelThresholds: Record<Level, number> = {
     'débutant': 0,
-    'intermédiaire': 3,
-    'avancé': 4,
-    'expert': 5
+    'intermédiaire': 50,
+    'avancé': 250,
+    'expert': 600
   };
 
   levelDescriptions: Record<Level, string> = {
