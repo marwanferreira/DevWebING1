@@ -17,7 +17,8 @@ import { Firestore } from '@angular/fire/firestore';
 export class GestionCandidaturesComponent implements OnInit {
   candidatures: Candidature[] = [];
   residents: UserProfile[] = [];
-  profile: UserProfile | null = null; // Add this line
+  profile: UserProfile | null = null;
+  reports: any[] = []; // Add this line
 
   selectedRole: { [email: string]: UserType } = {};
   selectedRoom: { [email: string]: number | null } = {};
@@ -35,6 +36,7 @@ export class GestionCandidaturesComponent implements OnInit {
     this.candidatures = await this.applicationService.getCandidatures();
     this.takenRooms = await this.userService.getTakenRooms();
     await this.loadResidents();
+    await this.loadReports();
   }
 
   async loadResidents(): Promise<void> {
@@ -113,5 +115,11 @@ export class GestionCandidaturesComponent implements OnInit {
     await deleteDoc(userRef);
     alert(`🗑️ ${user.pseudonym} supprimé.`);
     await this.ngOnInit();
+  }
+
+  async loadReports(): Promise<void> {
+    const reportsRef = collection(this.firestore, 'device-reports');
+    const snapshot = await getDocs(reportsRef);
+    this.reports = snapshot.docs.map(doc => doc.data());
   }
 }

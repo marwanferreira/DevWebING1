@@ -8,6 +8,16 @@
     </div>
   </div>
 
+  <!-- Report Form -->
+  <div *ngIf="showReportForm" class="report-form">
+    <h3>Signalement :</h3>
+    <textarea [(ngModel)]="reportText" placeholder="Décrivez le problème ici..." class="report-textarea"></textarea>
+    <button (click)="submitReport()" class="btn btn-primary">Envoyer le signalement</button>
+    <button (click)="cancelReport()" class="btn btn-secondary">Annuler</button> <!-- Add Cancel button -->
+  </div>
+
+  <hr> <!-- Horizontal line -->
+
   <!-- Add Object Form -->
   <div *ngIf="showAddObjectForm" class="add-object-form">
     <form (ngSubmit)="addObject()">
@@ -115,6 +125,7 @@
             </button>
           </div>
           <button *ngIf="userProfile?.role === 'admin'" (click)="editObject(device)" class="edit-button button-blue">Modifier</button>
+          <button *ngIf="userProfile?.role === 'simple' || userProfile?.role === 'complexe'" (click)="toggleReportForm(device)" class="report-button">Signaler un problème</button>
         </div>
       </div>
     </div>

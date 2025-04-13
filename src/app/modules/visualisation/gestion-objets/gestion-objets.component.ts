@@ -45,6 +45,46 @@ interface Device {
 })
 export class GestionObjetsComponent implements OnInit {
   devices: Device[] = [];
+  showReportForm = false;
+  reportText = ''; // Add this line
+  selectedDevice: Device | null = null;
+
+  toggleReportForm(device: Device) {
+    this.showReportForm = !this.showReportForm;
+    this.selectedDevice = device;
+    this.scrollToTop(); // Ensure this line is present to scroll to the top
+  }
+
+  async submitReport() {
+    if (!this.selectedDevice) {
+      alert('Aucun appareil sélectionné.');
+      return;
+    }
+
+    if (!this.reportText.trim()) {
+      alert('Veuillez entrer une description du problème.');
+      return;
+    }
+
+    const report = {
+      deviceId: this.selectedDevice.id,
+      deviceName: this.selectedDevice.name,
+      reportedBy: this.userProfile?.email,
+      description: this.reportText.trim(),
+      timestamp: new Date().toISOString()
+    };
+
+    try {
+      const reportsRef = collection(this.firestore, 'device-reports');
+      await addDoc(reportsRef, report);
+      alert('Signalement envoyé avec succès.');
+      this.showReportForm = false;
+      this.reportText = '';
+    } catch (error) {
+      console.error('Erreur lors de l\'envoi du signalement:', error);
+      alert('Erreur lors de l\'envoi du signalement.');
+    }
+  }
   filteredDevices: Device[] = [];
   searchQuery: string = '';
   userProfile: any;
@@ -265,5 +305,10 @@ toggleLight(device: Device) {
       console.error('Erreur lors de la suppression de l\'objet:', error);
       alert('Erreur lors de la suppression de l\'objet.');
     }
+  }
+
+  cancelReport() {
+    this.showReportForm = false;
+    this.reportText = ''; // Reset the report text
   }
 }

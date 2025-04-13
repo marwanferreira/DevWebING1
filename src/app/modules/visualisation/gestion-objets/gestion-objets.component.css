@@ -312,3 +312,9 @@
     gap: 10px;
   }
 }
+
+
+.report-textarea {
+  width: 100%;
+  height: 150px;
+}

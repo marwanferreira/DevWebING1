@@ -93,3 +93,13 @@
     </div>
   </div>
 </div>
+
+<div class="reports-section">
+  <h2>Signalement Objets</h2>
+  <div *ngFor="let report of reports" class="report-card">
+    <h3>{{ report.deviceName }}</h3>
+    <p><strong>Signalé par :</strong> {{ report.reportedBy }}</p>
+    <p><strong>Description :</strong> {{ report.description }}</p>
+    <p><strong>Date :</strong> {{ report.timestamp | date:'short' }}</p>
+  </div>
+</div>
