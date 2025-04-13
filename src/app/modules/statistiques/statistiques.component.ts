@@ -16,12 +16,24 @@ export class StatistiquesComponent implements OnInit {
   mostUsed: any[] = [];
   inefficientObjects: any[] = [];
   userType: string = '';
+  connectionRate: number = 0;
 
   constructor(private firestore: Firestore) {}
 
   async ngOnInit() {
     this.userType = localStorage.getItem('userType') || '';
     const now = new Date();
+
+    const usersRef = collection(this.firestore, 'users');
+    const usersSnap = await getDocs(usersRef);
+    const users = usersSnap.docs.map(doc => doc.data());
+    const activeUsers = users.filter(u => {
+      if (!u['lastLogin']) return false;
+      const days = (now.getTime() - new Date(u['lastLogin']).getTime()) / (1000 * 60 * 60 * 24);
+      return days <= 7;
+    });
+    this.connectionRate = (activeUsers.length / users.length) * 100;
+
 
     const colRef = collection(this.firestore, 'connected-objects');
     const snapshot = await getDocs(colRef);

@@ -29,6 +29,11 @@
 <button *ngIf="userType === 'admin'" (click)="exportData()">
   Exporter en CSV
 </button>
+<p class="titre-bleu">
+  Taux de connexion des utilisateurs : {{ connectionRate | number:'1.0-2' }}%
+</p>
+
+
 
 
 

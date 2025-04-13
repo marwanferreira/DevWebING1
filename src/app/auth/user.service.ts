@@ -52,6 +52,11 @@ export class UserService {
   getUser(): UserType {
     return (localStorage.getItem('userType') as UserType) || 'visiteur';
   }
+  
+  getUserProfile(): UserProfile {
+    return JSON.parse(localStorage.getItem('userProfile') || '{}');
+  }
+  
 
   is(type: UserType): boolean {
     return this.getUser() === type;

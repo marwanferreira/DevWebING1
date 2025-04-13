@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../../auth/user.service';
+import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,7 @@ export class LoginComponent {
   password = '';
   errorMessage = '';
 
-  constructor(private userService: UserService, private router: Router) {
+  constructor(private userService: UserService, private router: Router, private firestore: Firestore) {
     console.log("Login component loaded");
   }
 
@@ -27,6 +28,14 @@ export class LoginComponent {
     if (!success) {
       this.errorMessage = "Email ou mot de passe incorrect.";
       return;
+    }
+
+    const user = this.userService.getUserProfile();
+    if (user?.uid) {
+      const userRef = doc(this.firestore, 'users', user.uid);
+      await updateDoc(userRef, {
+        lastLogin: new Date().toISOString()
+      });
     }
 
     const role = this.userService.getUser();
