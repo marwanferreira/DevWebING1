@@ -1,0 +1,1 @@
+import{Ua as t,gb as o,hb as i,hc as m,rb as s}from"./chunk-XZRIOFSC.js";var p=class n{static \u0275fac=function(e){return new(e||n)};static \u0275cmp=t({type:n,selectors:[["app-gestion"]],decls:2,vars:0,template:function(e,c){e&1&&(o(0,"h2"),s(1,"Bienvenue dans le module de gestion"),i())},dependencies:[m],encapsulation:2})};export{p as GestionComponent};
