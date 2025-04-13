@@ -1,0 +1,36 @@
+<div class="signalements-container">
+  <h2 class="signalements-title">Signalement Objets</h2>
+  
+  <div *ngIf="signalements && signalements.length > 0; else noSignalements">
+    <div *ngFor="let signalement of signalements" class="signalement-card">
+      <h3 class="device-title">{{ signalement.deviceName }}</h3>
+      
+      <div class="signalement-info">
+        <div class="info-row">
+          <span class="info-label">Signalé par :</span>
+          <span class="info-value">{{ signalement.reportedBy }}</span>
+        </div>
+        
+        <div class="info-row">
+          <span class="info-label">Description :</span>
+          <span class="info-value">{{ signalement.description }}</span>
+        </div>
+        
+        <div class="info-row">
+          <span class="info-label">Date :</span>
+          <span class="info-value">{{ signalement.timestamp | date:'dd/MM/yy, HH:mm' }}</span>
+        </div>
+      </div>
+      
+      <div class="button-group" *ngIf="userProfile?.role === 'admin'">
+        <button class="action-button delete-button" (click)="deleteSignalement(signalement)">Supprimer le signalement</button>
+      </div>
+    </div>
+  </div>
+  
+  <ng-template #noSignalements>
+    <div class="no-signalements">
+      <p>Aucun signalement d'objet pour le moment.</p>
+    </div>
+  </ng-template>
+</div>

@@ -1,0 +1,78 @@
+/* Styling for Signalement Objets section */
+.signalements-container {
+  margin: 20px 0;
+  padding: 0 20px;
+}
+
+.signalements-title {
+  color: #0056b3;
+  font-size: 24px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.signalement-card {
+  background-color: #e7f3ff; /* Match the blue background */
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #cfe2ff; /* Match the border color */
+}
+
+.device-title {
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.info-row {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.info-label {
+  font-weight: 600;
+  min-width: 120px;
+  color: #495057;
+}
+
+.info-value {
+  color: #212529;
+}
+
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.action-button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.delete-button {
+  background-color: #dc3545;
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #c82333;
+}
+
+.no-signalements {
+  text-align: center;
+  padding: 20px;
+  color: #6c757d;
+  font-style: italic;
+  background-color: #e7f3ff;
+  border-radius: 8px;
+  border: 1px solid #cfe2ff;
+}

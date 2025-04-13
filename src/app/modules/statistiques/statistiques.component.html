@@ -1,37 +1,41 @@
-<h2 class="titre-bleu">Rapport statistique</h2>
+<div class="stats-container">
+  <h2 class="titre-bleu">Rapport statistique</h2>
 
-<p>Total objets : {{ data.length }}</p>
-<p>Utilisation totale : {{ totalUsage }}</p>
+  <p class="stats-info">Total objets : <span class="highlight-value">{{ data.length }}</span></p>
+  <p class="stats-info">Utilisation totale : <span class="highlight-value">{{ totalUsage }}</span></p>
 
-<h3 class="titre-bleu">Objets les plus utilisés :</h3>
-<ul>
-  <li *ngFor="let obj of mostUsed">
-    {{ obj.name }} ({{ obj.type }}) - usageCount: {{ obj.usageCount }}
-  </li>
-</ul>
+  <h3 class="titre-bleu">Objets les plus utilisés :</h3>
+  <ul class="stats-list">
+    <li *ngFor="let obj of mostUsed">
+      {{ obj.name }} ({{ obj.type }}) - usageCount: <span class="highlight-value">{{ obj.usageCount }}</span>
+    </li>
+  </ul>
 
-<h3 class="titre-bleu">Détails complets :</h3>
-<ul>
-  <li *ngFor="let obj of data">
-    {{ obj.name }} - {{ obj.type }} - {{ obj.location }}  
-    | usageCount: {{ obj.usageCount }}  
-    | lastInteraction: {{ obj.lastInteraction }}  
-    | status: {{ obj.status }}
-  </li>
-</ul>
+  <h3 class="titre-bleu">Détails complets :</h3>
+  <ul class="stats-list">
+    <li *ngFor="let obj of data">
+      {{ obj.name }} - {{ obj.type }} - {{ obj.location }}  
+      | usageCount: <span class="highlight-value">{{ obj.usageCount }}</span>  
+      | lastInteraction: {{ obj.lastInteraction }}  
+      | status: {{ obj.status }}
+    </li>
+  </ul>
 
-<h3 class="titre-bleu" *ngIf="inefficientObjects.length">Objets inefficaces ou inactifs</h3>
-<ul *ngIf="inefficientObjects.length">
-  <li *ngFor="let obj of inefficientObjects">
-    {{ obj.name }} ({{ obj.type }}) - usageCount: {{ obj.usageCount }} - lastInteraction: {{ obj.lastInteraction }}
-  </li>
-</ul>
-<button *ngIf="userType === 'admin'" (click)="exportData()">
-  Exporter en CSV
-</button>
-<p class="titre-bleu">
-  Taux de connexion des utilisateurs : {{ connectionRate | number:'1.0-2' }}%
-</p>
+  <h3 class="titre-bleu" *ngIf="inefficientObjects.length">Objets inefficaces ou inactifs</h3>
+  <ul class="stats-list inefficient-list" *ngIf="inefficientObjects.length">
+    <li *ngFor="let obj of inefficientObjects">
+      {{ obj.name }} ({{ obj.type }}) - usageCount: {{ obj.usageCount }} - lastInteraction: {{ obj.lastInteraction }}
+    </li>
+  </ul>
+  
+  <button *ngIf="userType === 'admin'" (click)="exportData()" class="export-button">
+    Exporter en CSV
+  </button>
+  
+  <p class="connection-rate">
+    Taux de connexion des utilisateurs : <span class="highlight-value">{{ connectionRate | number:'1.0-2' }}%</span>
+  </p>
+</div>
 
 
 

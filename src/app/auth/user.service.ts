@@ -99,7 +99,6 @@ export class UserService {
 
     const docSnap = snapshot.docs[0];
     const profile = { uid: docSnap.id, ...docSnap.data() } as UserProfile;
-    console.log('Current Profile:', profile); // Vérifiez le profil utilisateur
     return profile;
   }
 

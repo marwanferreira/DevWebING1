@@ -12,8 +12,10 @@
   <div *ngIf="showReportForm" class="report-form">
     <h3>Signalement :</h3>
     <textarea [(ngModel)]="reportText" placeholder="Décrivez le problème ici..." class="report-textarea"></textarea>
-    <button (click)="submitReport()" class="btn btn-primary">Envoyer le signalement</button>
-    <button (click)="cancelReport()" class="btn btn-secondary">Annuler</button> <!-- Add Cancel button -->
+    <div class="button-group">
+      <button (click)="submitReport()" class="btn btn-primary">Envoyer le signalement</button>
+      <button (click)="cancelReport()" class="btn btn-secondary">Annuler</button>
+    </div>
   </div>
 
   <hr> <!-- Horizontal line -->
