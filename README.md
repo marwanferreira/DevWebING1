@@ -1,5 +1,5 @@
 
-# Residia – Plateforme de Coliving Étudiant Intelligente 🏠✨
+## Residia – Plateforme de Coliving Étudiant Intelligente 🏠
 
 Bienvenue sur **Residia**, une plateforme Angular développée dans le cadre d’un projet académique à CY Tech. Elle simule une résidence de coliving pour étudiants, avec gestion des utilisateurs, objets connectés, et modules d’administration.
 
@@ -80,9 +80,13 @@ npx angular-cli-ghpages --dir=dist/dev-web-ing1/browser
 ## 🧠 Auteur
 
 **Marwan Ferreira da Silva**  
+
 **Nassim Marzaguii**
+
 **Basma Jebbour**
+
 **Douae Adlouni**
+
 **Henoc Mbamba**
 
 ---
